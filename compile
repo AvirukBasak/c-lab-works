@@ -1,0 +1,9 @@
+#!/bin/bash
+
+file="$1"
+if ! [ "$file" = "" ]
+then
+    gcc -g -Wall "$file" -o $(basename "$file" ".c")
+else
+    echo "error: no file name passed"
+fi
