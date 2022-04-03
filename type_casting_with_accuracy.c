@@ -12,6 +12,6 @@ int main()
      */
     float result = (float) x / y;
 
-    printf ("Result = %lf\n", result);
+    printf ("Result = %0.2lf\n", result);
     return 0;
 }

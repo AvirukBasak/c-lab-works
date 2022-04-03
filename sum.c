@@ -3,7 +3,8 @@
 
 # include <stdio.h>
 
-int main() {
+int main()
+{
     int num_1 = 0,
         num_2 = 0;
 
