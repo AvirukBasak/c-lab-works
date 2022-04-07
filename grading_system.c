@@ -22,15 +22,15 @@ int main()
     printf ("Grade: ");
     if (student_marks <= 40) {
         printf ("F\n");
-    } else if (student_marks > 40 && student_marks <= 55) {    // range of 15
+    } else if (student_marks > 40 && student_marks <= 55) {
         printf ("E\n");
-    } else if (student_marks > 55 && student_marks <= 70) {    // range of 15
+    } else if (student_marks > 55 && student_marks <= 70) {
         printf ("D\n");
-    } else if (student_marks > 70 && student_marks <= 85) {    // range of 15
+    } else if (student_marks > 70 && student_marks <= 85) {
         printf ("C\n");
-    } else if (student_marks > 85 && student_marks <= 95) {    // range of 10
+    } else if (student_marks > 85 && student_marks <= 95) {
         printf ("B\n");
-    } else if (student_marks > 95 && student_marks <= 100) {   // range of 5
+    } else if (student_marks > 95 && student_marks <= 100) {
         printf ("A\n");
     }
     return 0;

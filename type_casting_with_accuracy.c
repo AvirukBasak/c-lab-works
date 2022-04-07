@@ -1,4 +1,4 @@
-/* Program to demonstrate type casting
+/* Program to demonstrate type casting using accuracy format string
  */
 
 # include <stdio.h>
