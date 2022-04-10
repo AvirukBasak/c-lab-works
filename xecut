@@ -4,9 +4,11 @@ file="$1"
 if ! [ "$file" = "" ]
 then
     exec_name=$(basename "$file" ".c")
-    gcc -g -Wall "$file" -o "$exec_name"
-    ./"$exec_name"
-    rm "$exec_name"
+    if ! ( gcc -g -Wall $@ -o "$exec_name" )
+    then
+        ./"$exec_name"
+        rm "$exec_name"
+    fi
 else
     echo "error: no file name passed"
 fi
