@@ -1,11 +1,11 @@
 # include <stdio.h>
 
-int factorial (int num, int rslt)
+int factorial (int num)
 {
     if (num == 0 || num == 1) {
-        return rslt;
+        return 1;
     } else {
-        return factorial (num - 1, num * rslt);
+        return num * factorial (num - 1);
     }
 }
 
@@ -14,6 +14,6 @@ int main()
     int num;
     printf ("Enter a number: ");
     scanf ("%d", &num);
-    printf ("Factorial = %d\n", factorial (num, 1));
+    printf ("Factorial = %d\n", factorial (num));
     return 0;
 }
