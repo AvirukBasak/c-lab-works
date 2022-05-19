@@ -1,4 +1,5 @@
 # include <stdio.h>
+# include <stdlib.h>
 
 # define ARR_MAX_SIZE 1000
 
@@ -9,6 +10,11 @@ int main()
     printf("Enter arr len: ");
     scanf("%d", &len);
 
+    if (len > ARR_MAX_SIZE) {
+        fprintf(stderr, "insert: %d: array length too large\n", len);
+        exit(1);
+    }
+
     for (i = 0; i < len; i++) {
         printf("arr[%d] = ", i);
         scanf("%d", &arr[i]);
@@ -16,6 +22,12 @@ int main()
 
     printf("Enter index: ");
     scanf("%d", &idx);
+
+    if (idx > len) {
+        fprintf(stderr, "insert: %d: index out of bounds\n", idx);
+        exit(2);
+    }
+
     printf("Enter num: ");
     scanf("%d", &num);
 
