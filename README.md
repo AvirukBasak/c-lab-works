@@ -5,5 +5,5 @@ Basic C programs by college
 There's a bash script named runc. To run
 
 ```bash
-$ ./runc "file_name.c"
+$ ./runc "file_name.c" [args]
 ```
