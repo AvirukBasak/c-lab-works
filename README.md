@@ -2,8 +2,8 @@
 Basic C programs by college
 
 ### How to run?
-There's a bash script named `xecut`. To run
+There's a bash script named runc. To run
 
 ```bash
-$ ./xecut "file_name.c"
+$ ./runc "file_name.c"
 ```
