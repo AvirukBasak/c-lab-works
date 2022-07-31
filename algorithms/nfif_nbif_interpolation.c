@@ -42,14 +42,14 @@ int main()
     for (i = 0; i < total_points; i++)
         scanf("%lf", &arr_x[i]);
 
-    printf("Enter items of array Y = ");
-    for (i = 0; i < total_points; i++)
-        scanf("%lf", &arr_y[i]);
-
     if (!validateDataSetX(arr_x, total_points)) {
         printf("error: X data set doesn't have a common difference\n");
         abort();
     }
+
+    printf("Enter items of array Y = ");
+    for (i = 0; i < total_points; i++)
+        scanf("%lf", &arr_y[i]);
 
     while (1) {
         printf("\nEnter value of a = ");
