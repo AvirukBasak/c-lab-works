@@ -110,8 +110,10 @@ double getNextDiff(Mode mode, double *arr_y, size_t total_points)
     size_t i;                            // index of the difference term array
     // resetting static variables
     if (mode == RESET) {
-        free(arr_term);
-        arr_term = NULL;
+        if (arr_term) {
+            free(arr_term);
+            arr_term = NULL;
+        }
         diff_index = 0;
         return 0;
     }
@@ -133,12 +135,34 @@ double getNextDiff(Mode mode, double *arr_y, size_t total_points)
 
 double forwardInterp(double *arr_x, double *arr_y, size_t total_points, double a)
 {
+    getNextDiff(RESET, arr_y, total_points);
     double p = (a - arr_x[0]) / (arr_x[1] - arr_x[0]);
-    return p;
+    size_t i, j, result = 0;
+    for (i = 0; i < total_points; i++) {
+        double product = 1;
+        for (j = 0; j <= i; j++) {
+            product *= (p - j);
+        }
+        product /= factorial(i);
+        product *= getNextDiff(FORWARD, arr_y, total_points);
+        result += product;
+    }
+    return result;
 }
 
 double backwardInterp(double *arr_x, double *arr_y, size_t total_points, double a)
 {
+    getNextDiff(RESET, arr_y, total_points);
     double p = (a - arr_x[0]) / (arr_x[1] - arr_x[0]);
-    return p;
+    size_t i, j, result = 0;
+    for (i = 0; i < total_points; i++) {
+        double product = 1;
+        for (j = 0; j <= i; j++) {
+            product *= (p + j);
+        }
+        product /= factorial(i);
+        product *= getNextDiff(BACKWARD, arr_y, total_points);
+        result += product;
+    }
+    return result;
 }
