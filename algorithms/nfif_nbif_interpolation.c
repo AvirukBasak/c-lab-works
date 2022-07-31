@@ -17,8 +17,7 @@ typedef enum {
 size_t factorial(size_t n);
 bool validateDataSetX(double *arr_x, size_t total_points);
 double getNextDiff(Mode mode, double *arr_y, size_t total_points);
-double forwardInterp(double *arr_x, double *arr_y, size_t total_points, double a);
-double backwardInterp(double *arr_x, double *arr_y, size_t total_points, double a);
+double newtonsInterp(Mode mode, double *arr_x, double *arr_y, size_t total_points, double a);
 
 int main()
 {
@@ -54,8 +53,8 @@ int main()
     while (1) {
         printf("\nEnter value of a = ");
         scanf("%lf", &a);
-        rslt_fw = forwardInterp(arr_x, arr_y, total_points, a);
-        rslt_bw = backwardInterp(arr_x, arr_y, total_points, a);
+        rslt_fw = newtonsInterp(FORWARD, arr_x, arr_y, total_points, a);
+        rslt_bw = newtonsInterp(BACKWARD, arr_x, arr_y, total_points, a);
         if (a - (long long int) a == 0) {
             printf("fwd: f(%lld) = %0.5lf\n", (long long int) a, rslt_fw);
             printf("bkw: f(%lld) = %0.5lf\n", (long long int) a, rslt_bw);
@@ -133,7 +132,7 @@ double getNextDiff(Mode mode, double *arr_y, size_t total_points)
     return mode == BACKWARD ? arr_term[total_points - diff_index - 1] : arr_term[0];
 }
 
-double forwardInterp(double *arr_x, double *arr_y, size_t total_points, double a)
+double newtonsInterp(Mode mode, double *arr_x, double *arr_y, size_t total_points, double a)
 {
     getNextDiff(RESET, arr_y, total_points);
     double p = (a - arr_x[0]) / (arr_x[1] - arr_x[0]);
@@ -141,27 +140,10 @@ double forwardInterp(double *arr_x, double *arr_y, size_t total_points, double a
     for (i = 0; i < total_points; i++) {
         double product = 1;
         for (j = 0; j <= i; j++) {
-            product *= (p - j);
+            product *= (mode == FORWARD ? p - j : p + j);
         }
         product /= factorial(i);
-        product *= getNextDiff(FORWARD, arr_y, total_points);
-        result += product;
-    }
-    return result;
-}
-
-double backwardInterp(double *arr_x, double *arr_y, size_t total_points, double a)
-{
-    getNextDiff(RESET, arr_y, total_points);
-    double p = (a - arr_x[0]) / (arr_x[1] - arr_x[0]);
-    size_t i, j, result = 0;
-    for (i = 0; i < total_points; i++) {
-        double product = 1;
-        for (j = 0; j <= i; j++) {
-            product *= (p + j);
-        }
-        product /= factorial(i);
-        product *= getNextDiff(BACKWARD, arr_y, total_points);
+        product *= getNextDiff(mode, arr_y, total_points);
         result += product;
     }
     return result;
