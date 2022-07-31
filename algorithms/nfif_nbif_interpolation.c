@@ -8,15 +8,15 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
-enum {
+typedef enum {
     FORWARD = 0,
     BACKWARD = 1,
     RESET = 2
-};
+} Mode;
 
 size_t factorial(size_t n);
 bool validateDataSetX(double *arr_x, size_t total_points);
-double getNextDiff(int mode, double *arr_y, size_t total_points);
+double getNextDiff(Mode mode, double *arr_y, size_t total_points);
 double forwardInterp(double *arr_x, double *arr_y, size_t total_points, double a);
 double backwardInterp(double *arr_x, double *arr_y, size_t total_points, double a);
 
@@ -103,7 +103,7 @@ bool validateDataSetX(double *arr_x, size_t total_points)
 /**
  * use mode = FORWARD, BACKWARD or RESET
  */
-double getNextDiff(int mode, double *arr_y, size_t total_points)
+double getNextDiff(Mode mode, double *arr_y, size_t total_points)
 {
     static double *arr_term = NULL;      // array of difference term
     static size_t diff_index = 0;        // index of the difference term, 0 value indicates y array
