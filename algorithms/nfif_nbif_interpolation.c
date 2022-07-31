@@ -8,7 +8,7 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
-typedef enum {
+typedef const enum {
     FORWARD = 0,
     BACKWARD = 1,
     RESET = 2
@@ -125,11 +125,13 @@ double getNextDiff(Mode mode, double *arr_y, size_t total_points)
         }
     }
     // calculation loop
-    for (i = 0; i < total_points - diff_index -1; i++) {
-        arr_term[i] = arr_term[i +1] - arr_term[i];
+    if (diff_index) {
+        for (i = 0; i < total_points - diff_index +1; i++) {
+            arr_term[i] = arr_term[i +1] - arr_term[i];
+        }
     }
     diff_index++;
-    return mode == BACKWARD ? arr_term[total_points - diff_index - 1] : arr_term[0];
+    return mode == BACKWARD ? arr_term[total_points - diff_index] : arr_term[0];
 }
 
 double newtonsInterp(Mode mode, double *arr_x, double *arr_y, size_t total_points, double a)
@@ -143,7 +145,9 @@ double newtonsInterp(Mode mode, double *arr_x, double *arr_y, size_t total_point
             product *= (mode == FORWARD ? p - j : p + j);
         }
         product /= factorial(i);
-        product *= getNextDiff(mode, arr_y, total_points);
+        double dt = getNextDiff(mode, arr_y, total_points);
+        product *= dt;
+        printf("%s(%zu) %lf\n", mode == FORWARD ? "fw" : "bw", i, dt);
         result += product;
     }
     return result;
