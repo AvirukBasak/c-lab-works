@@ -13,8 +13,8 @@
  */
 double getNextDiff(int mode, double *arr_y, size_t total_points)
 {
-    static size_t diff_index = 0;        // index of the difference term, 0 value indicates y array
     static double *arr_term = NULL;      // array of difference term
+    static size_t diff_index = 0;        // index of the difference term, 0 value indicates y array
     size_t i;                            // index of the difference term array
     // resetting static variables
     if (mode == 2) {
@@ -27,35 +27,16 @@ double getNextDiff(int mode, double *arr_y, size_t total_points)
     if (diff_index == 0) {
         arr_term = malloc(sizeof(double) * total_points);
         // copy y array to terms array
-        for (i = 0; i < total_points - diff_index; i++) {
+        for (i = 0; i < total_points; i++) {
             arr_term[i] = arr_y[i];
         }
     }
     // calculation loop
-    for (i = 0; i < total_points - diff_index; i++) {
+    for (i = 0; i < total_points - diff_index -1; i++) {
         arr_term[i] = arr_term[i +1] - arr_term[i];
     }
+    diff_index++;
     return mode ? arr_term[total_points - diff_index - 1] : arr_term[0];
-}
-
-double forwardInterp(double *arr_x, double *arr_y, size_t total_points, double a)
-{
-    size_t i, j;
-    double rslt = 0,     // result
-           numtr = 1,    // numerator of a term
-           dentr = 1;    // denominator of a term
-    for (i = 0; i < total_points; i++) {
-        numtr = arr_y[i];
-        dentr = 1;
-        for (j = 0; j < total_points; j++) {
-            if (i != j) {
-                numtr = numtr * (a - arr_x[j]);
-                dentr = dentr * (arr_x[i] - arr_x[j]);
-            }
-        }
-        rslt += numtr / dentr;
-    }
-    return rslt;
 }
 
 int main()
