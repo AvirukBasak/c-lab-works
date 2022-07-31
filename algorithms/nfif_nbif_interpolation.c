@@ -8,6 +8,12 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
+enum {
+    FORWARD = 0,
+    BACKWARD = 1,
+    RESET = 2
+};
+
 size_t factorial(size_t n);
 bool validateDataSetX(double *arr_x, size_t total_points);
 double getNextDiff(int mode, double *arr_y, size_t total_points);
@@ -57,10 +63,17 @@ int main()
             printf("fwd: f(%0.5lf) = %0.5lf\n", a, rslt_fw);
             printf("bkw: f(%0.5lf) = %0.5lf\n", a, rslt_bw);
         }
-        
+
+        printf("\nErrors:\n");
+        err_a = rslt_fw - rslt_bw;
+        err_r = err_a / rslt_fw;
+        err_p = err_r * 100;
+        printf("exact error      = %lf\n", err_a);
+        printf("relative error   = %lf\n", err_r);
+        printf("percentage error = %lf\n", err_p);
     }
 
-    getNextDiff(2, arr_y, total_points);
+    getNextDiff(RESET, arr_y, total_points);
     free(arr_x);
     free(arr_y);
 
@@ -88,7 +101,7 @@ bool validateDataSetX(double *arr_x, size_t total_points)
 }
 
 /**
- * use mode = 0 for forward difference, 1 for backward, 2 to reset function
+ * use mode = FORWARD, BACKWARD or RESET
  */
 double getNextDiff(int mode, double *arr_y, size_t total_points)
 {
@@ -96,7 +109,7 @@ double getNextDiff(int mode, double *arr_y, size_t total_points)
     static size_t diff_index = 0;        // index of the difference term, 0 value indicates y array
     size_t i;                            // index of the difference term array
     // resetting static variables
-    if (mode == 2) {
+    if (mode == RESET) {
         free(arr_term);
         arr_term = NULL;
         diff_index = 0;
@@ -115,17 +128,17 @@ double getNextDiff(int mode, double *arr_y, size_t total_points)
         arr_term[i] = arr_term[i +1] - arr_term[i];
     }
     diff_index++;
-    return mode ? arr_term[total_points - diff_index - 1] : arr_term[0];
+    return mode == BACKWARD ? arr_term[total_points - diff_index - 1] : arr_term[0];
 }
 
 double forwardInterp(double *arr_x, double *arr_y, size_t total_points, double a)
 {
     double p = (a - arr_x[0]) / (arr_x[1] - arr_x[0]);
-    
+    return p;
 }
 
 double backwardInterp(double *arr_x, double *arr_y, size_t total_points, double a)
 {
     double p = (a - arr_x[0]) / (arr_x[1] - arr_x[0]);
-    
+    return p;
 }
