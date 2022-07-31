@@ -82,7 +82,7 @@ int main()
 size_t factorial(size_t n)
 {
     size_t f = 1;
-    for ( ;n >= 1; n--) {
+    for (; n > 1; n--) {
         f *= n;
     }
     return f;
@@ -141,13 +141,12 @@ double newtonsInterp(Mode mode, double *arr_x, double *arr_y, size_t total_point
     size_t i, j, result = 0;
     for (i = 0; i < total_points; i++) {
         double product = 1;
-        for (j = 0; j <= i; j++) {
+        for (j = 0; j < i; j++) {
             product *= (mode == FORWARD ? p - j : p + j);
         }
         product /= factorial(i);
         double dt = getNextDiff(mode, arr_y, total_points);
         product *= dt;
-        printf("%s(%zu) %lf\n", mode == FORWARD ? "fw" : "bw", i, dt);
         result += product;
     }
     return result;
