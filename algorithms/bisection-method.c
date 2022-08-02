@@ -10,11 +10,50 @@
 # include <stdbool.h>
 # include <math.h>
 
+typedef struct { double a; double b; } Interval;
+int signum(double x);
+Interval calcInterval(double (*f)(double x));
 double *bisectAndSolve(double (*f)(double x));
 void printRoots(double *roots);
 
+size_t ITERATIONS;
+
+int sign(double x)
+{
+    if (x < 0)
+        return -1;
+    else if (x > 0)
+        return +1;
+    else
+        return x;
+}
+
+Interval calcInterval(double (*f)(double x))
+{
+    Interval itvl = { 0, 0 };
+    return itvl;
+}
+
 double *bisectAndSolve(double (*f)(double x))
 {
+    double a, b, t, fa, fb, ft;
+    size_t i = 0;
+    Interval itvl = calcInterval(f);
+    a = itvl.a;
+    b = itvl.b;
+    for (i = 0; i < ITERATIONS; i++) {
+        t = a + b / 2;
+        fa = f(a);
+        fb = f(b);
+        ft = f(t);
+        if (sign(fa) == sign(ft)) {
+            a = t;
+        } else if (sign(fb) == sign(ft)) {
+            b = t;
+        } else {
+            printf("¯\\_(ツ)_/¯\n");
+        }
+    }
     return NULL;
 }
 
@@ -59,7 +98,8 @@ double f4(double x)
 }
 
 int main()
-{ 
+{
+    ITERATIONS = 15;
     printRoots(bisectAndSolve(f1));
     printRoots(bisectAndSolve(f2));
     printRoots(bisectAndSolve(f3));
