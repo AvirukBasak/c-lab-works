@@ -10,7 +10,9 @@
 # include <stdbool.h>
 # include <math.h>
 
-# define ITERATIONS (5)
+# define TOLERANCE      (0.001)
+# define MAX_ITERATIONS (1000)
+# define FLOAT_FORMAT   "%0.3lf"
 
 typedef struct {
     double a;
@@ -37,10 +39,10 @@ void printRoot(Tuple intrvl)
     ea = intrvl.a - intrvl.b;
     er = ea / intrvl.a;
     ep = er * 100;
-    printf("  result = %0.3lf, %0.3lf\n", intrvl.a, intrvl.b);
-    printf("    exact error      = %0.3lf\n", ea);
-    printf("    relative error   = %0.3lf\n", er);
-    printf("    percentage error = %0.3lf\n", ep);
+    printf("  result = " FLOAT_FORMAT ", " FLOAT_FORMAT "\n", intrvl.a, intrvl.b);
+    printf("    exact error      = " FLOAT_FORMAT "\n", ea);
+    printf("    relative error   = " FLOAT_FORMAT "\n", er);
+    printf("    percentage error = " FLOAT_FORMAT "\n", ep);
 }
 
 Tuple bisectAndSolve(double (*f)(double x), Tuple intrvl)
@@ -49,21 +51,24 @@ Tuple bisectAndSolve(double (*f)(double x), Tuple intrvl)
     size_t i = 0;
     a = intrvl.a;
     b = intrvl.b;
-    for (i = 0; i < ITERATIONS; i++) {
+    printf("\t a\t b\t t\t f(a)\t f(b)\t f(t)\n");
+    while (i < MAX_ITERATIONS) {
         fa = f(a);
         fb = f(b);
         t = (a + b) / 2;
         ft = f(t);
-        printf("i:%zu: %0.3lf, %0.3lf, %0.3lf, %0.3lf, %0.3lf, %0.3lf\n", i, a, b, t, fa, fb, ft);
-        if (signum(fa) == signum(ft)) {
-            a = t;
-        } else if (signum(fb) == signum(ft)) {
-            b = t;
-        } else {
+        printf("i:%zu:\t " FLOAT_FORMAT "\t " FLOAT_FORMAT "\t " FLOAT_FORMAT "\t " FLOAT_FORMAT "\t " FLOAT_FORMAT "\t " FLOAT_FORMAT "\n", i, a, b, t, fa, fb, ft);
+        if (f(t) == 0 || fabs(a - b) < TOLERANCE) {
             intrvl.a = a;
             intrvl.b = b;
             return intrvl;
         }
+        if (signum(fa) == signum(ft)) {
+            a = t;
+        } else if (signum(fb) == signum(ft)) {
+            b = t;
+        }
+        i++;
     }
     intrvl.a = a;
     intrvl.b = b;
@@ -96,25 +101,21 @@ double f4(double x)
 
 int main()
 {
-/*
     Tuple it1 = { 1, 2 };
     printf("\nf(x) = x⁴ - x - 10\n");
     printRoot(bisectAndSolve(f1, it1));
-*/
-/*
+
     Tuple it2 = { 0, 1 };
     printf("\nf(x) = x - e^(-x)\n");
     printRoot(bisectAndSolve(f2, it2));
-*/
 
     Tuple it3 = { 1, 1.368 };
     printf("\nf(x) = e^(-x) - 3 log(x)\n");
     printRoot(bisectAndSolve(f3, it3));
 
-/*
     Tuple it4 = { 1, 2 };
     printf("\nf(x) = e^(-x) * (x² + 5x + 2) + 1\n");
     printRoot(bisectAndSolve(f4, it4));
-*/
+
     return 0;
 }
