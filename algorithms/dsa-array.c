@@ -2,7 +2,7 @@
  * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
  * @topic   1 dimensional array data structure implemented in C
  * @date    3-8-2022
- * @cc      gcc -Wall -D ARR_TYPE=int -D TYPE_FORMAT='"%d"' -o dsa-array dsa-array.c
+ * @cc      gcc -Wall -D ARR_TYPE=int -D TYPE_FORMAT='"%d"' -o dsa-int-array dsa-array.c
  */
 
 # include <stdio.h>
