@@ -10,7 +10,7 @@
 # include <stdbool.h>
 # include <math.h>
 
-# define ITERATIONS (10)
+# define ITERATIONS (5)
 
 typedef struct {
     double a;
@@ -37,10 +37,10 @@ void printRoot(Tuple intrvl)
     ea = intrvl.a - intrvl.b;
     er = ea / intrvl.a;
     ep = er * 100;
-    printf("  result = %lf, %lf\n", intrvl.a, intrvl.b);
-    printf("    exact error      = %lf\n", ea);
-    printf("    relative error   = %lf\n", er);
-    printf("    percentage error = %lf\n", ep);
+    printf("  result = %0.3lf, %0.3lf\n", intrvl.a, intrvl.b);
+    printf("    exact error      = %0.3lf\n", ea);
+    printf("    relative error   = %0.3lf\n", er);
+    printf("    percentage error = %0.3lf\n", ep);
 }
 
 Tuple bisectAndSolve(double (*f)(double x), Tuple intrvl)
@@ -54,6 +54,7 @@ Tuple bisectAndSolve(double (*f)(double x), Tuple intrvl)
         fb = f(b);
         t = (a + b) / 2;
         ft = f(t);
+        printf("i:%zu: %0.3lf, %0.3lf, %0.3lf, %0.3lf, %0.3lf, %0.3lf\n", i, a, b, t, fa, fb, ft);
         if (signum(fa) == signum(ft)) {
             a = t;
         } else if (signum(fb) == signum(ft)) {
@@ -95,14 +96,15 @@ double f4(double x)
 
 int main()
 {
+/*
     Tuple it1 = { 1, 2 };
     printf("\nf(x) = x⁴ - x - 10\n");
     printRoot(bisectAndSolve(f1, it1));
-
+*/
     Tuple it2 = { 1, 2 };
     printf("\nf(x) = x - e^x\n");
     printRoot(bisectAndSolve(f2, it2));
-
+/*
     Tuple it3 = { 1, 2 };
     printf("\nf(x) = e^(-x) - 3 log(x)\n");
     printRoot(bisectAndSolve(f3, it3));
@@ -110,6 +112,6 @@ int main()
     Tuple it4 = { 1, 2 };
     printf("\nf(x) = e^(-x) * (x² + 5x + 2) + 1\n");
     printRoot(bisectAndSolve(f4, it4));
-
+*/
     return 0;
 }
