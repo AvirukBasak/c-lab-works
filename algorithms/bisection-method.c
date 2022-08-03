@@ -1,6 +1,6 @@
 /**
  * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
- * @topic   Using Langrang Interpolation to find f(a) for a given data set and a given value of 'a'
+ * @topic   Using Bisection Method to find f(a) for a given data set and a given value of 'a'
  * @date    25-7-2022
  * @cc      gcc -Wall -lm -o bisection-method bisection-method.c
  */
@@ -10,15 +10,18 @@
 # include <stdbool.h>
 # include <math.h>
 
-typedef struct { double a; double b; } Interval;
+# define ITERATIONS (15)
+
+typedef struct {
+    double a;
+    double b;
+} Tuple;
+
 int signum(double x);
-Interval calcInterval(double (*f)(double x));
-double *bisectAndSolve(double (*f)(double x));
-void printRoots(double *roots);
+void printRoot(Tuple intrvl);
+Tuple bisectAndSolve(double (*f)(double x), Tuple intrvl);
 
-size_t ITERATIONS;
-
-int sign(double x)
+int signum(double x)
 {
     if (x < 0)
         return -1;
@@ -28,81 +31,83 @@ int sign(double x)
         return x;
 }
 
-Interval calcInterval(double (*f)(double x))
+void printRoot(Tuple intrvl)
 {
-    Interval itvl = { 0, 0 };
-    return itvl;
+    double ea, er, ep;
+    ea = intrvl.a - intrvl.b;
+    er = ea / intrvl.a;
+    ep = er * 100;
+    printf("  result = %lf, %lf\n", intrvl.a, intrvl.b);
+    printf("    exact error      = %lf\n", ea);
+    printf("    relative error   = %lf\n", er);
+    printf("    percentage error = %lf\n", ep);
 }
 
-double *bisectAndSolve(double (*f)(double x))
+Tuple bisectAndSolve(double (*f)(double x), Tuple intrvl)
 {
     double a, b, t, fa, fb, ft;
     size_t i = 0;
-    Interval itvl = calcInterval(f);
-    a = itvl.a;
-    b = itvl.b;
+    a = intrvl.a;
+    b = intrvl.b;
     for (i = 0; i < ITERATIONS; i++) {
         t = a + b / 2;
         fa = f(a);
         fb = f(b);
         ft = f(t);
-        if (sign(fa) == sign(ft)) {
+        if (fa * ft < 0) {
             a = t;
-        } else if (sign(fb) == sign(ft)) {
+        } else if (fb * ft < 0) {
             b = t;
         } else {
-            printf("¯\\_(ツ)_/¯\n");
+            // printf("¯\\_(ツ)_/¯\n");
         }
     }
-    return NULL;
-}
-
-void printRoots(double *roots)
-{
-    size_t root_count, i;
-    if (!roots) {
-        printf("error: no roots passed\n");
-        abort();
-    }
-    root_count = (size_t) roots[0];
-    printf("roots = { ");
-    for (i = 1; i <= root_count; i++) {
-        printf("%0.5lf%s", roots[i], i == root_count ? " " : ", ");
-    }
-    printf("}\n");
-    free(roots);
+    intrvl.a = a;
+    intrvl.b = b;
+    return intrvl;
 }
 
 double f1(double x)
 {
-    // f1(x) = x⁴ - x - 10
+    // f(x) = x⁴ - x - 10
     return pow(x, 4) - x - 10;
 }
 
 double f2(double x)
 {
-    // f1(x) = x - e^x
+    // f(x) = x - e^x
     return x - exp(x);
 }
 
 double f3(double x)
 {
-    // f1(x) = e^(-x) - 3 log(x)
+    // f(x) = e^(-x) - 3 log(x)
     return exp(-x) - 3 * log(x);
 }
 
 double f4(double x)
 {
-    // f1(x) = e^(-x) * (x² + 5x + 2) + 1
+    // f(x) = e^(-x) * (x² + 5x + 2) + 1
     return exp(-x) * (pow(x, 2) + 5 * x + 2) + 1;
 }
 
 int main()
 {
-    ITERATIONS = 15;
-    printRoots(bisectAndSolve(f1));
-    printRoots(bisectAndSolve(f2));
-    printRoots(bisectAndSolve(f3));
-    printRoots(bisectAndSolve(f4));
+    Tuple it1 = { 1, 2 };
+    printf("\nf(x) = x⁴ - x - 10\n");
+    printRoot(bisectAndSolve(f1, it1));
+
+    Tuple it2 = { 1, 2 };
+    printf("\nf(x) = x - e^x\n");
+    printRoot(bisectAndSolve(f2, it2));
+
+    Tuple it3 = { 1, 2 };
+    printf("\nf(x) = e^(-x) - 3 log(x)\n");
+    printRoot(bisectAndSolve(f3, it3));
+
+    Tuple it4 = { 1, 2 };
+    printf("\nf(x) = e^(-x) * (x² + 5x + 2) + 1\n");
+    printRoot(bisectAndSolve(f4, it4));
+
     return 0;
 }
