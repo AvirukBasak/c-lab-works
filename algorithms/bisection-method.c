@@ -101,8 +101,8 @@ int main()
     printf("\nf(x) = x⁴ - x - 10\n");
     printRoot(bisectAndSolve(f1, it1));
 */
-    Tuple it2 = { 1, 2 };
-    printf("\nf(x) = x - e^x\n");
+    Tuple it2 = { 0, 1 };
+    printf("\nf(x) = x - e^(-x)\n");
     printRoot(bisectAndSolve(f2, it2));
 /*
     Tuple it3 = { 1, 2 };
