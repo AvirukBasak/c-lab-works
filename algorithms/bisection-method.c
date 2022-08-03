@@ -78,8 +78,8 @@ double f1(double x)
 
 double f2(double x)
 {
-    // f(x) = x - e^x
-    return x - exp(x);
+    // f(x) = x - e^(-x)
+    return x - exp(-x);
 }
 
 double f3(double x)
