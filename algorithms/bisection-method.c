@@ -10,7 +10,7 @@
 # include <stdbool.h>
 # include <math.h>
 
-# define ITERATIONS (15)
+# define ITERATIONS (10)
 
 typedef struct {
     double a;
@@ -50,16 +50,18 @@ Tuple bisectAndSolve(double (*f)(double x), Tuple intrvl)
     a = intrvl.a;
     b = intrvl.b;
     for (i = 0; i < ITERATIONS; i++) {
-        t = a + b / 2;
         fa = f(a);
         fb = f(b);
+        t = (a + b) / 2;
         ft = f(t);
-        if (fa * ft < 0) {
+        if (signum(fa) == signum(ft)) {
             a = t;
-        } else if (fb * ft < 0) {
+        } else if (signum(fb) == signum(ft)) {
             b = t;
         } else {
-            // printf("¯\\_(ツ)_/¯\n");
+            intrvl.a = a;
+            intrvl.b = b;
+            return intrvl;
         }
     }
     intrvl.a = a;
