@@ -1,7 +1,7 @@
 /**
  * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
  * @topic   Using Bisection Method to find f(a) for a given data set and a given value of 'a'
- * @date    25-7-2022
+ * @date    1-8-2022
  * @cc      gcc -Wall -lm -o bisection-method bisection-method.c
  */
 
