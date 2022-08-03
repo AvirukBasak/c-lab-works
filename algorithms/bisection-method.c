@@ -101,14 +101,17 @@ int main()
     printf("\nf(x) = x⁴ - x - 10\n");
     printRoot(bisectAndSolve(f1, it1));
 */
+/*
     Tuple it2 = { 0, 1 };
     printf("\nf(x) = x - e^(-x)\n");
     printRoot(bisectAndSolve(f2, it2));
-/*
-    Tuple it3 = { 1, 2 };
+*/
+
+    Tuple it3 = { 1, 1.368 };
     printf("\nf(x) = e^(-x) - 3 log(x)\n");
     printRoot(bisectAndSolve(f3, it3));
 
+/*
     Tuple it4 = { 1, 2 };
     printf("\nf(x) = e^(-x) * (x² + 5x + 2) + 1\n");
     printRoot(bisectAndSolve(f4, it4));
