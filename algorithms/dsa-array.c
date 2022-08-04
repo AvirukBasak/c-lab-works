@@ -25,6 +25,7 @@ typedef ARR_TYPE* Array;
 void arr_nullPtrCheck(char *fname, Array arr);
 Array new_array(size_t size);
 Array arr_resize(Array arr, size_t size, size_t new_sz);
+size_t arr_length(Array arr, size_t size);
 void arr_print(Array arr, size_t size);
 void arr_traverse(Array arr, size_t size, void (*callback)(ArrayType el));
 size_t arr_search(Array arr, size_t size, ArrayType val);
@@ -69,6 +70,17 @@ Array arr_resize(Array arr, size_t size, size_t new_sz)
     return arr2;
 }
 
+size_t arr_length(Array arr, size_t size)
+{
+    size_t i;
+    for (i = size -1; i >= 0; i--) {
+        if (i != 0) {
+            return i +1;
+        }
+    }
+    return 0;
+}
+
 void arr_print(Array arr, size_t size)
 {
     size_t i;
@@ -91,8 +103,9 @@ void arr_traverse(Array arr, size_t size, void (*callback)(ArrayType el))
 
 size_t arr_search(Array arr, size_t size, ArrayType val)
 {
-    size_t i;
-    for (i = 0; i < size; i++) {
+    size_t i, len;
+    len = arr_length(arr, size);
+    for (i = 0; i < len; i++) {
         if (arr[i] == val)
             return i;
     }
@@ -101,11 +114,12 @@ size_t arr_search(Array arr, size_t size, ArrayType val)
 
 size_t *arr_searchAll(Array arr, size_t size, ArrayType val, size_t *matches)
 {
-    size_t *locations, i;
+    size_t *locations, i, len;
+    arr_nullPtrCheck("search all", arr);
     *matches = 0;
     locations = NULL;
-    arr_nullPtrCheck("search all", arr);
-    for (i = 0; i < size; i++) {
+    len = arr_length(arr, size);
+    for (i = 0; i < len; i++) {
         if (arr[i] == val) {
             locations = realloc(locations, ++(*matches) * sizeof(size_t));
             if (!locations) {
@@ -169,15 +183,17 @@ Array arr_deleteValue(Array arr, size_t size, ArrayType val)
 
 Array arr_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
 {
-    size_t i, j, k;
+    size_t i, j, k, len1, len2;
     arr_nullPtrCheck("concat", arr1);
     arr_nullPtrCheck("concat", arr2);
-    *new_sz = sz1 + sz2;
+    len1 = arr_length(arr1, sz1);
+    len2 = arr_length(arr2, sz2);
+    *new_sz = len1 + len2;
     Array arr3 = new_array(*new_sz);
-    for (i = k = 0; i < sz1 && k < *new_sz; i++, k++) {
+    for (i = k = 0; i < len1 && k < *new_sz; i++, k++) {
         arr3[k] = arr1[i];
     }
-    for (j = 0; j < sz2 && k < *new_sz; j++, k++) {
+    for (j = 0; j < len2 && k < *new_sz; j++, k++) {
         arr3[k] = arr1[j];
     }
     return arr3;
@@ -185,10 +201,47 @@ Array arr_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
 
 Array arr_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
 {
-    
+    size_t i, j, k, len1, len2;
+    arr_nullPtrCheck("merge", arr1);
+    arr_nullPtrCheck("merge", arr2);
+    len1 = arr_length(arr1, sz1);
+    len2 = arr_length(arr2, sz2);
+    *new_sz = len1 + len2;
+    Array arr3 = new_array(*new_sz);
+    i = j = k = 0;
+    while (i < len1 && j < len2) {
+        if (arr1[i] < arr2[j]) {
+            arr3[k] = arr1[i];
+            i++;
+            k++;
+        } else if (arr2[j] < arr1[i]) {
+            arr3[k] = arr2[j];
+            j++;
+            k++;
+        } else {
+            arr3[k] = arr1[i] = arr2[j];
+            i++;
+            j++;
+            k++;
+        }
+    }
+    while (i < len1) {
+        arr3[k] = arr1[i];
+        i++;
+        k++;
+    }
+    while (j < len2) {
+        arr3[k] = arr2[j];
+        j++;
+        k++;
+    }
+    return arr3;
 }
 
-Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
+{
+    
+}
 
 void arr_free(Array* arr_ptr)
 {
