@@ -15,9 +15,12 @@
 #    define TYPE_FORMAT  "%d"
 # endif
 
-# define ERR_NULLPTR     (200)
-# define ERR_OUTOFBOUNDS (201)
-# define ERR_ARRAYFULL   (203)
+# define ERR_NULLPTR      (200)
+# define ERR_OUTOFBOUNDS  (201)
+# define ERR_ARRAYFULL    (203)
+# define ERR_MENUDRIVELIM (204)
+
+# define MENUDRIVE_LIMIT  (10000)
 
 typedef ARR_TYPE  ArrayType;
 typedef ARR_TYPE* Array;
@@ -271,7 +274,7 @@ void arr_free(Array* arr_ptr)
 int main()
 {
     int choice;
-    size_t i, size, len;
+    size_t i, size, len, menudrive_iterations = 0;
     printf("enter array max size: ");
     scanf("%zu", &size);
     printf("enter no of elements to store: ");
@@ -338,12 +341,33 @@ int main()
                 break;
             }
             case 4: {
+                ArrayType val;
+                size_t index;
+                printf("enter index of insertion: ");
+                scanf("%zu", &index);
+                printf("enter value to be inserted: ");
+                scanf(TYPE_FORMAT, &val);
+                arr = arr_insert(arr, size, index, val);
+                printf("new arr = ");
+                arr_print(arr, size);
                 break;
             }
             case 5: {
+                size_t index;
+                printf("enter index of deletion: ");
+                scanf("%zu", &index);
+                arr = arr_delIndex(arr, size, index);
+                printf("new arr = ");
+                arr_print(arr, size);
                 break;
             }
             case 6: {
+                ArrayType val;
+                printf("enter value to delete: ");
+                scanf(TYPE_FORMAT, &val);
+                arr = arr_delValue(arr, size, val);
+                printf("new arr = ");
+                arr_print(arr, size);
                 break;
             }
             case 7: {
@@ -359,6 +383,11 @@ int main()
                 printf("choice invalid\n");
             }
         }
-    } while (choice);
+        menudrive_iterations++;
+    } while (choice && menudrive_iterations < MENUDRIVE_LIMIT);
+    if (menudrive_iterations >= MENUDRIVE_LIMIT) {
+        printf("exceeded menu drive limit of '%zu' iterations\n", MENUDRIVE_LIMIT);
+        exit(ERR_MENUDRIVELIM);
+    }
     return 0;
 }
