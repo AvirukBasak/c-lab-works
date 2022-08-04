@@ -444,7 +444,7 @@ int main()
         }
         menudrive_iterations++;
     } while (choice && menudrive_iterations < MENUDRIVE_LIMIT);
-    // MENUDRIVE_LIMIT to avoid an accidental infinite loop due of scanf I/O error
+    // MENUDRIVE_LIMIT to avoid an accidental infinite loop due to scanf I/O error
     if (menudrive_iterations >= MENUDRIVE_LIMIT) {
         printf("exceeded menu drive limit of '%zu' iterations\n", MENUDRIVE_LIMIT);
         exit(ERR_MENUDRIVELIM);
