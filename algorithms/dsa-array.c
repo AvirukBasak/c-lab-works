@@ -240,7 +240,23 @@ Array arr_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
 
 Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
 {
-    
+    size_t i, j, k, len1, len2;
+    arr_nullPtrCheck("merge", arr1);
+    arr_nullPtrCheck("merge", arr2);
+    len1 = arr_length(arr1, sz1);
+    len2 = arr_length(arr2, sz2);
+    *new_sz = len1 + len2;
+    Array arr3 = new_array(*new_sz);
+    i = j = k = 0;
+    while (i < len1 && j < len2) {
+        if (arr1[i] == arr2[j]) {
+            arr3[k] = arr1[i] = arr2[j];
+            i++;
+            j++;
+            k++;
+        }
+    }
+    return arr3;
 }
 
 void arr_free(Array* arr_ptr)
