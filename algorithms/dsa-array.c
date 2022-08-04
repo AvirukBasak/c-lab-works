@@ -83,10 +83,11 @@ size_t arr_length(Array arr, size_t size)
 
 void arr_print(Array arr, size_t size)
 {
-    size_t i;
+    size_t i, len;
     arr_nullPtrCheck("print", arr);
+    len = arr_length(arr, size);
     printf("{ ");
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < len; i++) {
         printf(TYPE_FORMAT "%s", arr[i], i == size -1 ? " " : ", ");
     }
     printf("}\n");
