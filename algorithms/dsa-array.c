@@ -297,6 +297,7 @@ int main()
             "enter your choice: "
         );
         scanf("%d", &choice);
+        printf("\n");
         switch (choice) {
             case 0: {
                 break;
@@ -337,7 +338,6 @@ int main()
                 break;
             }
             case 4: {
-                
                 break;
             }
             case 5: {
