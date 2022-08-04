@@ -22,21 +22,22 @@
 typedef ARR_TYPE  ArrayType;
 typedef ARR_TYPE* Array;
 
-void array_nullptr_check(char *fname, Array arr);
+void array_nullptrCheck(char *fname, Array arr);
 Array new_array(size_t size);
+Array array_resize(Array arr, size_t size, size_t new_sz);
 void array_print(Array arr, size_t size);
 void array_traverse(Array arr, size_t size, void (*callback)(ArrayType el));
-size_t array_search(Array arr, size_t size, ArrayType key);
-size_t *array_searchAll(Array arr, size_t size, ArrayType key, size_t *matches);
-Array array_insert(Array arr, size_t size, size_t loc, ArrayType key);
-Array array_deleteLoc(Array arr, size_t size, size_t loc);
-Array array_deleteKey(Array arr, size_t size, ArrayType key);
+size_t array_search(Array arr, size_t size, ArrayType val);
+size_t *array_searchAll(Array arr, size_t size, ArrayType val, size_t *matches);
+Array array_insert(Array arr, size_t size, size_t index, ArrayType val);
+Array array_deleteIndex(Array arr, size_t size, size_t index);
+Array array_deleteValue(Array arr, size_t size, ArrayType val);
 Array array_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
 Array array_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
 Array array_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
 void array_free(Array* arr_ptr);
 
-void array_nullptr_check(char *fname, Array arr)
+void array_nullptrCheck(char *fname, Array arr)
 {
     if (!arr) {
         printf("array: %s: null pointer\n", fname);
@@ -48,14 +49,30 @@ Array new_array(size_t size)
 {
     // calloc initialises all indices with 0, last index 0 indicates atleast 1 empty index
     Array arr = calloc(sizeof(ArrayType), size);
-    array_nullptr_check("new", arr);
+    array_nullptrCheck("new", arr);
     return arr;
+}
+
+Array array_resize(Array arr, size_t size, size_t new_sz)
+{
+    size_t i;
+    array_nullptrCheck("resize", arr);
+    // calloc initialises all indices with 0, last index 0 indicates atleast 1 empty index
+    Array arr2 = calloc(sizeof(ArrayType), new_sz);
+    array_nullptrCheck("resize", arr2);
+    for (i = 0; i < new_sz; i++) {
+        if (i >= size)
+            break;
+        arr2[i] = arr[i];
+    }
+    free(arr);
+    return arr2;
 }
 
 void array_print(Array arr, size_t size)
 {
     size_t i;
-    array_nullptr_check("print", arr);
+    array_nullptrCheck("print", arr);
     printf("{ ");
     for (i = 0; i < size; i++) {
         printf(TYPE_FORMAT "%s", arr[i], i == size -1 ? " " : ", ");
@@ -66,44 +83,93 @@ void array_print(Array arr, size_t size)
 void array_traverse(Array arr, size_t size, void (*callback)(ArrayType el))
 {
     size_t i;
-    array_nullptr_check("traverse", arr);
+    array_nullptrCheck("traverse", arr);
     for (i = 0; i < size; i++) {
         callback(arr[i]);
     }
 }
 
-size_t array_search(Array arr, size_t size, ArrayType key)
+size_t array_search(Array arr, size_t size, ArrayType val)
 {
     size_t i;
     for (i = 0; i < size; i++) {
-        if (arr[i] == key)
+        if (arr[i] == val)
             return i;
     }
     return size;
 }
 
-size_t *array_searchAll(Array arr, size_t size, ArrayType key, size_t *matches)
+size_t *array_searchAll(Array arr, size_t size, ArrayType val, size_t *matches)
 {
-    return NULL;
+    size_t *locations, i;
+    *matches = 0;
+    locations = NULL;
+    array_nullptrCheck("search all", arr);
+    for (i = 0; i < size; i++) {
+        if (arr[i] == val) {
+            locations = realloc(locations, ++(*matches) * sizeof(size_t));
+            if (!locations) {
+                printf("array: search all: null pointer\n");
+                exit(ERR_NULLPTR);
+            }
+            locations[*matches -1] = i;
+        }
+    }
+    return locations;
 }
 
-Array array_insert(Array arr, size_t size, size_t loc, ArrayType key)
+Array array_insert(Array arr, size_t size, size_t index, ArrayType val)
 {
     size_t i;
-    array_nullptr_check("insert", arr);
-    if (loc >= size) {
+    array_nullptrCheck("insert", arr);
+    if (index >= size) {
         printf("array: insert: index out of bounds\n");
         exit(ERR_OUTOFBOUNDS);
     } else if (arr[size -1] != 0) {
         printf("array: insert: array is full\n");
         exit(ERR_ARRAYFULL);
     }
-    for (i = size -1; i > loc; i--) {
+    for (i = size -1; i > index; i--) {
         arr[i] = arr[i -1];
     }
-    arr[loc] = key;
+    arr[index] = val;
     return arr;
 }
+
+Array array_deleteIndex(Array arr, size_t size, size_t index)
+{
+    size_t i;
+    array_nullptrCheck("delete index", arr);
+    if (index >= size) {
+        printf("array: delete index: index out of bounds\n");
+        exit(ERR_OUTOFBOUNDS);
+    }
+    for (i = index; i < size -1; i++) {
+        arr[i] = arr[i +1];
+    }
+    arr[i] = 0;
+    return arr;
+}
+
+Array array_deleteValue(Array arr, size_t size, ArrayType val)
+{
+    size_t *locations = NULL, *matches = 0, i;
+    array_nullptrCheck("delete value", arr);
+    locations = array_searchAll(arr, size, val, matches);
+    if (!locations) {
+        printf("array: delete value: null pointer\n");
+        exit(ERR_NULLPTR);
+    }
+    for (i = 0; i < *matches; i++) {
+        array_deleteIndex(arr, size, locations[i]);
+    }
+    free(locations);
+    return arr;
+}
+
+Array array_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+Array array_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+Array array_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
 
 void array_free(Array* arr_ptr)
 {
