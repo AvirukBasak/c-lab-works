@@ -74,7 +74,7 @@ size_t arr_length(Array arr, size_t size)
 {
     size_t i;
     for (i = size -1; i >= 0; i--) {
-        if (i != 0) {
+        if (arr[i] != 0) {
             return i +1;
         }
     }
@@ -88,7 +88,7 @@ void arr_print(Array arr, size_t size)
     len = arr_length(arr, size);
     printf("{ ");
     for (i = 0; i < len; i++) {
-        printf(TYPE_FORMAT "%s", arr[i], i == size -1 ? " " : ", ");
+        printf(TYPE_FORMAT "%s", arr[i], i == len -1 ? " " : ", ");
     }
     printf("}\n");
 }
@@ -315,7 +315,7 @@ int main()
                 if (index == size) {
                     printf("value not found\n");
                 } else {
-                    printf("value '" TYPE_FORMAT "' found at index = %zu", val, index);
+                    printf("value '" TYPE_FORMAT "' found at index = %zu\n", val, index);
                 }
                 break;
             }
@@ -332,6 +332,7 @@ int main()
                     for (i = 0; i < matches; i++) {
                         printf("%zu%s", indices[i], i == matches -1 ? "" : ", ");
                     }
+                    printf("\n");
                 }
                 break;
             }
