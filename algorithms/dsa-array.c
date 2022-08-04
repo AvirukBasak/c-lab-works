@@ -22,22 +22,22 @@
 typedef ARR_TYPE  ArrayType;
 typedef ARR_TYPE* Array;
 
-void array_nullptrCheck(char *fname, Array arr);
+void arr_nullPtrCheck(char *fname, Array arr);
 Array new_array(size_t size);
-Array array_resize(Array arr, size_t size, size_t new_sz);
-void array_print(Array arr, size_t size);
-void array_traverse(Array arr, size_t size, void (*callback)(ArrayType el));
-size_t array_search(Array arr, size_t size, ArrayType val);
-size_t *array_searchAll(Array arr, size_t size, ArrayType val, size_t *matches);
-Array array_insert(Array arr, size_t size, size_t index, ArrayType val);
-Array array_deleteIndex(Array arr, size_t size, size_t index);
-Array array_deleteValue(Array arr, size_t size, ArrayType val);
-Array array_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
-Array array_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
-Array array_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
-void array_free(Array* arr_ptr);
+Array arr_resize(Array arr, size_t size, size_t new_sz);
+void arr_print(Array arr, size_t size);
+void arr_traverse(Array arr, size_t size, void (*callback)(ArrayType el));
+size_t arr_search(Array arr, size_t size, ArrayType val);
+size_t *arr_searchAll(Array arr, size_t size, ArrayType val, size_t *matches);
+Array arr_insert(Array arr, size_t size, size_t index, ArrayType val);
+Array arr_deleteIndex(Array arr, size_t size, size_t index);
+Array arr_deleteValue(Array arr, size_t size, ArrayType val);
+Array arr_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+Array arr_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+void arr_free(Array* arr_ptr);
 
-void array_nullptrCheck(char *fname, Array arr)
+void arr_nullPtrCheck(char *fname, Array arr)
 {
     if (!arr) {
         printf("array: %s: null pointer\n", fname);
@@ -49,17 +49,17 @@ Array new_array(size_t size)
 {
     // calloc initialises all indices with 0, last index 0 indicates atleast 1 empty index
     Array arr = calloc(sizeof(ArrayType), size);
-    array_nullptrCheck("new", arr);
+    arr_nullPtrCheck("new", arr);
     return arr;
 }
 
-Array array_resize(Array arr, size_t size, size_t new_sz)
+Array arr_resize(Array arr, size_t size, size_t new_sz)
 {
     size_t i;
-    array_nullptrCheck("resize", arr);
+    arr_nullPtrCheck("resize", arr);
     // calloc initialises all indices with 0, last index 0 indicates atleast 1 empty index
     Array arr2 = calloc(sizeof(ArrayType), new_sz);
-    array_nullptrCheck("resize", arr2);
+    arr_nullPtrCheck("resize", arr2);
     for (i = 0; i < new_sz; i++) {
         if (i >= size)
             break;
@@ -69,10 +69,10 @@ Array array_resize(Array arr, size_t size, size_t new_sz)
     return arr2;
 }
 
-void array_print(Array arr, size_t size)
+void arr_print(Array arr, size_t size)
 {
     size_t i;
-    array_nullptrCheck("print", arr);
+    arr_nullPtrCheck("print", arr);
     printf("{ ");
     for (i = 0; i < size; i++) {
         printf(TYPE_FORMAT "%s", arr[i], i == size -1 ? " " : ", ");
@@ -80,16 +80,16 @@ void array_print(Array arr, size_t size)
     printf("}\n");
 }
 
-void array_traverse(Array arr, size_t size, void (*callback)(ArrayType el))
+void arr_traverse(Array arr, size_t size, void (*callback)(ArrayType el))
 {
     size_t i;
-    array_nullptrCheck("traverse", arr);
+    arr_nullPtrCheck("traverse", arr);
     for (i = 0; i < size; i++) {
         callback(arr[i]);
     }
 }
 
-size_t array_search(Array arr, size_t size, ArrayType val)
+size_t arr_search(Array arr, size_t size, ArrayType val)
 {
     size_t i;
     for (i = 0; i < size; i++) {
@@ -99,12 +99,12 @@ size_t array_search(Array arr, size_t size, ArrayType val)
     return size;
 }
 
-size_t *array_searchAll(Array arr, size_t size, ArrayType val, size_t *matches)
+size_t *arr_searchAll(Array arr, size_t size, ArrayType val, size_t *matches)
 {
     size_t *locations, i;
     *matches = 0;
     locations = NULL;
-    array_nullptrCheck("search all", arr);
+    arr_nullPtrCheck("search all", arr);
     for (i = 0; i < size; i++) {
         if (arr[i] == val) {
             locations = realloc(locations, ++(*matches) * sizeof(size_t));
@@ -118,10 +118,10 @@ size_t *array_searchAll(Array arr, size_t size, ArrayType val, size_t *matches)
     return locations;
 }
 
-Array array_insert(Array arr, size_t size, size_t index, ArrayType val)
+Array arr_insert(Array arr, size_t size, size_t index, ArrayType val)
 {
     size_t i;
-    array_nullptrCheck("insert", arr);
+    arr_nullPtrCheck("insert", arr);
     if (index >= size) {
         printf("array: insert: index out of bounds\n");
         exit(ERR_OUTOFBOUNDS);
@@ -136,10 +136,10 @@ Array array_insert(Array arr, size_t size, size_t index, ArrayType val)
     return arr;
 }
 
-Array array_deleteIndex(Array arr, size_t size, size_t index)
+Array arr_deleteIndex(Array arr, size_t size, size_t index)
 {
     size_t i;
-    array_nullptrCheck("delete index", arr);
+    arr_nullPtrCheck("delete index", arr);
     if (index >= size) {
         printf("array: delete index: index out of bounds\n");
         exit(ERR_OUTOFBOUNDS);
@@ -151,27 +151,46 @@ Array array_deleteIndex(Array arr, size_t size, size_t index)
     return arr;
 }
 
-Array array_deleteValue(Array arr, size_t size, ArrayType val)
+Array arr_deleteValue(Array arr, size_t size, ArrayType val)
 {
     size_t *locations = NULL, *matches = 0, i;
-    array_nullptrCheck("delete value", arr);
-    locations = array_searchAll(arr, size, val, matches);
+    arr_nullPtrCheck("delete value", arr);
+    locations = arr_searchAll(arr, size, val, matches);
     if (!locations) {
         printf("array: delete value: null pointer\n");
         exit(ERR_NULLPTR);
     }
     for (i = 0; i < *matches; i++) {
-        array_deleteIndex(arr, size, locations[i]);
+        arr_deleteIndex(arr, size, locations[i]);
     }
     free(locations);
     return arr;
 }
 
-Array array_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
-Array array_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
-Array array_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+Array arr_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
+{
+    size_t i, j, k;
+    arr_nullPtrCheck("concat", arr1);
+    arr_nullPtrCheck("concat", arr2);
+    *new_sz = sz1 + sz2;
+    Array arr3 = new_array(*new_sz);
+    for (i = k = 0; i < sz1 && k < *new_sz; i++, k++) {
+        arr3[k] = arr1[i];
+    }
+    for (j = 0; j < sz2 && k < *new_sz; j++, k++) {
+        arr3[k] = arr1[j];
+    }
+    return arr3;
+}
 
-void array_free(Array* arr_ptr)
+Array arr_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
+{
+    
+}
+
+Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
+
+void arr_free(Array* arr_ptr)
 {
     if (arr_ptr && *arr_ptr) {
         free(*arr_ptr);
