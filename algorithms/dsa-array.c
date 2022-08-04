@@ -115,22 +115,22 @@ size_t arr_search(Array arr, size_t size, ArrayType val)
 
 size_t *arr_searchAll(Array arr, size_t size, ArrayType val, size_t *matches)
 {
-    size_t *locations, i, len;
+    size_t *indices, i, len;
     arr_nullPtrCheck("search all", arr);
     *matches = 0;
-    locations = NULL;
+    indices = NULL;
     len = arr_length(arr, size);
     for (i = 0; i < len; i++) {
         if (arr[i] == val) {
-            locations = realloc(locations, ++(*matches) * sizeof(size_t));
-            if (!locations) {
+            indices = realloc(indices, ++(*matches) * sizeof(size_t));
+            if (!indices) {
                 printf("array: search all: null pointer\n");
                 exit(ERR_NULLPTR);
             }
-            locations[*matches -1] = i;
+            indices[*matches -1] = i;
         }
     }
-    return locations;
+    return indices;
 }
 
 Array arr_insert(Array arr, size_t size, size_t index, ArrayType val)
@@ -168,17 +168,17 @@ Array arr_delIndex(Array arr, size_t size, size_t index)
 
 Array arr_delValue(Array arr, size_t size, ArrayType val)
 {
-    size_t *locations = NULL, *matches = 0, i;
+    size_t *indices = NULL, matches = 0, i;
     arr_nullPtrCheck("delete value", arr);
-    locations = arr_searchAll(arr, size, val, matches);
-    if (!locations) {
+    indices = arr_searchAll(arr, size, val, &matches);
+    if (!indices) {
         printf("array: delete value: null pointer\n");
         exit(ERR_NULLPTR);
     }
-    for (i = 0; i < *matches; i++) {
-        arr_delIndex(arr, size, locations[i]);
+    for (i = 0; i < matches; i++) {
+        arr_delIndex(arr, size, indices[i]);
     }
-    free(locations);
+    free(indices);
     return arr;
 }
 
@@ -270,5 +270,94 @@ void arr_free(Array* arr_ptr)
 
 int main()
 {
+    int choice;
+    size_t i, size, len;
+    printf("enter array max size: ");
+    scanf("%zu", &size);
+    printf("enter no of elements to store: ");
+    scanf("%zu", &len);
+    Array arr = new_array(size);
+    printf("enter %zu elements = ", len);
+    for (i = 0; i < len; i++) {
+        scanf(TYPE_FORMAT, &arr[i]);
+    }
+    do {
+        printf(
+            "\nchoices:\n"
+            "   0: exit\n"
+            "   1: print array\n"
+            "   2: search for matching value\n"
+            "   3: search for every matching value\n"
+            "   4: insert a value\n"
+            "   5: delete value at index\n"
+            "   6: delete every match of a value\n"
+            "   7: concatenate two arrays\n"
+            "   8: merge two sorted arrays\n"
+            "   9: intersection of two sorted arrays\n"
+            "enter your choice: "
+        );
+        scanf("%d", &choice);
+        switch (choice) {
+            case 0: {
+                break;
+            }
+            case 1: {
+                printf("arr = ");
+                arr_print(arr, size);
+                break;
+            }
+            case 2: {
+                ArrayType val;
+                size_t index;
+                printf("enter value to be searched: ");
+                scanf(TYPE_FORMAT, &val);
+                index = arr_search(arr, size, val);
+                if (index == size) {
+                    printf("value not found\n");
+                } else {
+                    printf("value '" TYPE_FORMAT "' found at index = %zu", val, index);
+                }
+                break;
+            }
+            case 3: {
+                ArrayType val;
+                size_t i, *indices, matches;
+                printf("enter value to be searched: ");
+                scanf(TYPE_FORMAT, &val);
+                indices = arr_searchAll(arr, size, val, &matches);
+                if (matches == 0) {
+                    printf("value not found\n");
+                } else {
+                    printf("value '" TYPE_FORMAT "' found at indices: ", val);
+                    for (i = 0; i < matches; i++) {
+                        printf("%zu%s", indices[i], i == matches -1 ? "" : ", ");
+                    }
+                }
+                break;
+            }
+            case 4: {
+                
+                break;
+            }
+            case 5: {
+                break;
+            }
+            case 6: {
+                break;
+            }
+            case 7: {
+                break;
+            }
+            case 8: {
+                break;
+            }
+            case 9: {
+                break;
+            }
+            default: {
+                printf("choice invalid\n");
+            }
+        }
+    } while (choice);
     return 0;
 }
