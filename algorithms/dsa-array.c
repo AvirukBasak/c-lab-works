@@ -31,8 +31,8 @@ void arr_traverse(Array arr, size_t size, void (*callback)(size_t index, ArrayTy
 size_t arr_search(Array arr, size_t size, ArrayType val);
 size_t *arr_searchAll(Array arr, size_t size, ArrayType val, size_t *matches);
 Array arr_insert(Array arr, size_t size, size_t index, ArrayType val);
-Array arr_deleteIndex(Array arr, size_t size, size_t index);
-Array arr_deleteValue(Array arr, size_t size, ArrayType val);
+Array arr_delIndex(Array arr, size_t size, size_t index);
+Array arr_delValue(Array arr, size_t size, ArrayType val);
 Array arr_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
 Array arr_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
 Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz);
@@ -151,7 +151,7 @@ Array arr_insert(Array arr, size_t size, size_t index, ArrayType val)
     return arr;
 }
 
-Array arr_deleteIndex(Array arr, size_t size, size_t index)
+Array arr_delIndex(Array arr, size_t size, size_t index)
 {
     size_t i;
     arr_nullPtrCheck("delete index", arr);
@@ -166,7 +166,7 @@ Array arr_deleteIndex(Array arr, size_t size, size_t index)
     return arr;
 }
 
-Array arr_deleteValue(Array arr, size_t size, ArrayType val)
+Array arr_delValue(Array arr, size_t size, ArrayType val)
 {
     size_t *locations = NULL, *matches = 0, i;
     arr_nullPtrCheck("delete value", arr);
@@ -176,7 +176,7 @@ Array arr_deleteValue(Array arr, size_t size, ArrayType val)
         exit(ERR_NULLPTR);
     }
     for (i = 0; i < *matches; i++) {
-        arr_deleteIndex(arr, size, locations[i]);
+        arr_delIndex(arr, size, locations[i]);
     }
     free(locations);
     return arr;
@@ -242,8 +242,8 @@ Array arr_merge(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
 Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
 {
     size_t i, j, k, len1, len2;
-    arr_nullPtrCheck("merge", arr1);
-    arr_nullPtrCheck("merge", arr2);
+    arr_nullPtrCheck("intersect", arr1);
+    arr_nullPtrCheck("intersect", arr2);
     len1 = arr_length(arr1, sz1);
     len2 = arr_length(arr2, sz2);
     *new_sz = len1 + len2;
