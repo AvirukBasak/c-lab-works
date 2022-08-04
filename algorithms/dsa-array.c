@@ -198,7 +198,7 @@ Array arr_concat(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_sz)
         arr3[k] = arr1[i];
     }
     for (j = 0; j < len2 && k < *new_sz; j++, k++) {
-        arr3[k] = arr1[j];
+        arr3[k] = arr2[j];
     }
     return arr3;
 }
@@ -302,14 +302,19 @@ int main()
         scanf("%d", &choice);
         printf("\n");
         switch (choice) {
+            // exit
             case 0: {
                 break;
             }
+            // print
             case 1: {
-                printf("arr = ");
+                printf("arr  = ");
                 arr_print(arr, size);
+                printf("len  = %zu\n", arr_length(arr, size));
+                printf("size = %zu\n", size);
                 break;
             }
+            // search
             case 2: {
                 ArrayType val;
                 size_t index;
@@ -323,6 +328,7 @@ int main()
                 }
                 break;
             }
+            // searchAll
             case 3: {
                 ArrayType val;
                 size_t i, *indices, matches;
@@ -338,8 +344,10 @@ int main()
                     }
                     printf("\n");
                 }
+                free(indices);
                 break;
             }
+            // insert
             case 4: {
                 ArrayType val;
                 size_t index;
@@ -348,35 +356,83 @@ int main()
                 printf("enter value to be inserted: ");
                 scanf(TYPE_FORMAT, &val);
                 arr = arr_insert(arr, size, index, val);
-                printf("new arr = ");
+                printf("arr = ");
                 arr_print(arr, size);
                 break;
             }
+            // delIndex
             case 5: {
                 size_t index;
                 printf("enter index of deletion: ");
                 scanf("%zu", &index);
                 arr = arr_delIndex(arr, size, index);
-                printf("new arr = ");
+                printf("arr = ");
                 arr_print(arr, size);
                 break;
             }
+            // delValue
             case 6: {
                 ArrayType val;
                 printf("enter value to delete: ");
                 scanf(TYPE_FORMAT, &val);
                 arr = arr_delValue(arr, size, val);
-                printf("new arr = ");
+                printf("arr = ");
                 arr_print(arr, size);
                 break;
             }
+            // concat
             case 7: {
+                size_t size2, len2, new_sz;
+                printf("enter second array max size: ");
+                scanf("%zu", &size2);
+                printf("enter no of elements to store: ");
+                scanf("%zu", &len2);
+                Array arr2 = new_array(size2);
+                printf("enter %zu elements = ", len2);
+                for (i = 0; i < len2; i++) {
+                    scanf(TYPE_FORMAT, &arr2[i]);
+                }
+                Array arr3 = arr_concat(arr, size, arr2, size2, &new_sz);
+                printf("new arr = ");
+                arr_print(arr3, new_sz);
+                free(arr3);
                 break;
             }
+            // merge
             case 8: {
+                size_t size2, len2, new_sz;
+                printf("enter second array max size: ");
+                scanf("%zu", &size2);
+                printf("enter no of elements to store: ");
+                scanf("%zu", &len2);
+                Array arr2 = new_array(size2);
+                printf("enter sorted %zu elements = ", len2);
+                for (i = 0; i < len2; i++) {
+                    scanf(TYPE_FORMAT, &arr2[i]);
+                }
+                Array arr3 = arr_merge(arr, size, arr2, size2, &new_sz);
+                printf("new arr = ");
+                arr_print(arr3, new_sz);
+                free(arr3);
                 break;
             }
+            // intersect
             case 9: {
+                size_t size2, len2, new_sz;
+                printf("enter second array max size: ");
+                scanf("%zu", &size2);
+                printf("enter no of elements to store: ");
+                scanf("%zu", &len2);
+                Array arr2 = new_array(size2);
+                printf("enter sorted %zu elements = ", len2);
+                for (i = 0; i < len2; i++) {
+                    scanf(TYPE_FORMAT, &arr2[i]);
+                }
+                printf("h\n");
+                Array arr3 = arr_intersect(arr, size, arr2, size2, &new_sz);
+                printf("new arr = ");
+                arr_print(arr3, new_sz);
+                free(arr3);
                 break;
             }
             default: {
@@ -385,6 +441,7 @@ int main()
         }
         menudrive_iterations++;
     } while (choice && menudrive_iterations < MENUDRIVE_LIMIT);
+    // MENUDRIVE_LIMIT to avoid an accidental infinite loop due of scanf I/O error
     if (menudrive_iterations >= MENUDRIVE_LIMIT) {
         printf("exceeded menu drive limit of '%zu' iterations\n", MENUDRIVE_LIMIT);
         exit(ERR_MENUDRIVELIM);
