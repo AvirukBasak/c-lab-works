@@ -20,7 +20,7 @@
 # define ERR_ARRAYFULL    (203)
 # define ERR_MENUDRIVELIM (204)
 
-# define MENUDRIVE_LIMIT  (10000l)
+# define MENUDRIVE_LIMIT  ((size_t) 10000)
 
 typedef ARR_TYPE  ArrayType;
 typedef ARR_TYPE* Array;
