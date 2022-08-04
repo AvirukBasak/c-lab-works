@@ -69,7 +69,7 @@ Array arr_resize(Array arr, size_t size, size_t new_sz)
             break;
         arr2[i] = arr[i];
     }
-    free(arr);
+    arr_free(&arr);
     return arr2;
 }
 
@@ -399,7 +399,7 @@ int main()
                 Array arr3 = arr_concat(arr, size, arr2, size2, &new_sz);
                 printf("new arr = ");
                 arr_print(arr3, new_sz);
-                free(arr3);
+                arr_free(&arr3);
                 break;
             }
             // merge
@@ -417,7 +417,7 @@ int main()
                 Array arr3 = arr_merge(arr, size, arr2, size2, &new_sz);
                 printf("new arr = ");
                 arr_print(arr3, new_sz);
-                free(arr3);
+                arr_free(&arr3);
                 break;
             }
             // intersect
@@ -435,7 +435,7 @@ int main()
                 Array arr3 = arr_intersect(arr, size, arr2, size2, &new_sz);
                 printf("new arr = ");
                 arr_print(arr3, new_sz);
-                free(arr3);
+                arr_free(&arr3);
                 break;
             }
             default: {
@@ -449,5 +449,6 @@ int main()
         printf("exceeded menu drive limit of '%zu' iterations\n", MENUDRIVE_LIMIT);
         exit(ERR_MENUDRIVELIM);
     }
+    arr_free(&arr);
     return 0;
 }
