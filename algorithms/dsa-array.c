@@ -27,7 +27,7 @@ Array new_array(size_t size);
 Array arr_resize(Array arr, size_t size, size_t new_sz);
 size_t arr_length(Array arr, size_t size);
 void arr_print(Array arr, size_t size);
-void arr_traverse(Array arr, size_t size, void (*callback)(ArrayType el));
+void arr_traverse(Array arr, size_t size, void (*callback)(size_t index, ArrayType val));
 size_t arr_search(Array arr, size_t size, ArrayType val);
 size_t *arr_searchAll(Array arr, size_t size, ArrayType val, size_t *matches);
 Array arr_insert(Array arr, size_t size, size_t index, ArrayType val);
@@ -93,12 +93,12 @@ void arr_print(Array arr, size_t size)
     printf("}\n");
 }
 
-void arr_traverse(Array arr, size_t size, void (*callback)(ArrayType el))
+void arr_traverse(Array arr, size_t size, void (*callback)(size_t index, ArrayType val))
 {
     size_t i;
     arr_nullPtrCheck("traverse", arr);
     for (i = 0; i < size; i++) {
-        callback(arr[i]);
+        callback(i, arr[i]);
     }
 }
 
