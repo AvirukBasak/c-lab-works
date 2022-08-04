@@ -253,7 +253,11 @@ Array arr_intersect(Array arr1, size_t sz1, Array arr2, size_t sz2, size_t *new_
     Array arr3 = new_array(*new_sz);
     i = j = k = 0;
     while (i < len1 && j < len2) {
-        if (arr1[i] == arr2[j]) {
+        if (arr1[i] < arr2[j]) {
+            i++;
+        } else if (arr2[j] < arr1[i]) {
+            j++;
+        } else {
             arr3[k] = arr1[i] = arr2[j];
             i++;
             j++;
@@ -428,7 +432,6 @@ int main()
                 for (i = 0; i < len2; i++) {
                     scanf(TYPE_FORMAT, &arr2[i]);
                 }
-                printf("h\n");
                 Array arr3 = arr_intersect(arr, size, arr2, size2, &new_sz);
                 printf("new arr = ");
                 arr_print(arr3, new_sz);
