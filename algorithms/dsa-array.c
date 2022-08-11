@@ -178,7 +178,7 @@ Array arr_delValue(Array arr, size_t size, ArrayType val)
         printf("array: delete value: null pointer\n");
         exit(ERR_NULLPTR);
     }
-    for (i = 0; i < matches; i++) {
+    for (i = matches -1; i >= 0; i--) {
         arr_delIndex(arr, size, indices[i]);
     }
     free(indices);
@@ -399,6 +399,7 @@ int main()
                 Array arr3 = arr_concat(arr, size, arr2, size2, &new_sz);
                 printf("new arr = ");
                 arr_print(arr3, new_sz);
+                arr_free(&arr2);
                 arr_free(&arr3);
                 break;
             }
@@ -417,6 +418,7 @@ int main()
                 Array arr3 = arr_merge(arr, size, arr2, size2, &new_sz);
                 printf("new arr = ");
                 arr_print(arr3, new_sz);
+                arr_free(&arr2);
                 arr_free(&arr3);
                 break;
             }
@@ -435,6 +437,7 @@ int main()
                 Array arr3 = arr_intersect(arr, size, arr2, size2, &new_sz);
                 printf("new arr = ");
                 arr_print(arr3, new_sz);
+                arr_free(&arr2);
                 arr_free(&arr3);
                 break;
             }

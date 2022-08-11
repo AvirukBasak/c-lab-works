@@ -254,7 +254,7 @@
 <span class="lineno">178 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;array: delete value: null pointer</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 <span class="lineno">179 </span>        <span class="n">exit</span><span class="p">(</span><span class="n">ERR_NULLPTR</span><span class="p">);</span>
 <span class="lineno">180 </span>    <span class="p">}</span>
-<span class="lineno">181 </span>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">matches</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">181 </span>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">matches</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
 <span class="lineno">182 </span>        <span class="n">arr_delIndex</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 <span class="lineno">183 </span>    <span class="p">}</span>
 <span class="lineno">184 </span>    <span class="n">free</span><span class="p">(</span><span class="n">indices</span><span class="p">);</span>
@@ -475,59 +475,62 @@
 <span class="lineno">399 </span>                <span class="n">Array</span> <span class="n">arr3</span> <span class="o">=</span> <span class="n">arr_concat</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">size2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">new_sz</span><span class="p">);</span>
 <span class="lineno">400 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;new arr = &quot;</span><span class="p">);</span>
 <span class="lineno">401 </span>                <span class="n">arr_print</span><span class="p">(</span><span class="n">arr3</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">);</span>
-<span class="lineno">402 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr3</span><span class="p">);</span>
-<span class="lineno">403 </span>                <span class="k">break</span><span class="p">;</span>
-<span class="lineno">404 </span>            <span class="p">}</span>
-<span class="lineno">405 </span>            <span class="c1">// merge</span>
-<span class="lineno">406 </span>            <span class="k">case</span> <span class="mi">8</span><span class="o">:</span> <span class="p">{</span>
-<span class="lineno">407 </span>                <span class="kt">size_t</span> <span class="n">size2</span><span class="p">,</span> <span class="n">len2</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">;</span>
-<span class="lineno">408 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter second array max size: &quot;</span><span class="p">);</span>
-<span class="lineno">409 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size2</span><span class="p">);</span>
-<span class="lineno">410 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter no of elements to store: &quot;</span><span class="p">);</span>
-<span class="lineno">411 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">len2</span><span class="p">);</span>
-<span class="lineno">412 </span>                <span class="n">Array</span> <span class="n">arr2</span> <span class="o">=</span> <span class="n">new_array</span><span class="p">(</span><span class="n">size2</span><span class="p">);</span>
-<span class="lineno">413 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter sorted %zu elements = &quot;</span><span class="p">,</span> <span class="n">len2</span><span class="p">);</span>
-<span class="lineno">414 </span>                <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<span class="lineno">415 </span>                    <span class="n">scanf</span><span class="p">(</span><span class="n">TYPE_FORMAT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arr2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="lineno">416 </span>                <span class="p">}</span>
-<span class="lineno">417 </span>                <span class="n">Array</span> <span class="n">arr3</span> <span class="o">=</span> <span class="n">arr_merge</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">size2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">new_sz</span><span class="p">);</span>
-<span class="lineno">418 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;new arr = &quot;</span><span class="p">);</span>
-<span class="lineno">419 </span>                <span class="n">arr_print</span><span class="p">(</span><span class="n">arr3</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">);</span>
-<span class="lineno">420 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr3</span><span class="p">);</span>
-<span class="lineno">421 </span>                <span class="k">break</span><span class="p">;</span>
-<span class="lineno">422 </span>            <span class="p">}</span>
-<span class="lineno">423 </span>            <span class="c1">// intersect</span>
-<span class="lineno">424 </span>            <span class="k">case</span> <span class="mi">9</span><span class="o">:</span> <span class="p">{</span>
-<span class="lineno">425 </span>                <span class="kt">size_t</span> <span class="n">size2</span><span class="p">,</span> <span class="n">len2</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">;</span>
-<span class="lineno">426 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter second array max size: &quot;</span><span class="p">);</span>
-<span class="lineno">427 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size2</span><span class="p">);</span>
-<span class="lineno">428 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter no of elements to store: &quot;</span><span class="p">);</span>
-<span class="lineno">429 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">len2</span><span class="p">);</span>
-<span class="lineno">430 </span>                <span class="n">Array</span> <span class="n">arr2</span> <span class="o">=</span> <span class="n">new_array</span><span class="p">(</span><span class="n">size2</span><span class="p">);</span>
-<span class="lineno">431 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter sorted %zu elements = &quot;</span><span class="p">,</span> <span class="n">len2</span><span class="p">);</span>
-<span class="lineno">432 </span>                <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<span class="lineno">433 </span>                    <span class="n">scanf</span><span class="p">(</span><span class="n">TYPE_FORMAT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arr2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="lineno">434 </span>                <span class="p">}</span>
-<span class="lineno">435 </span>                <span class="n">Array</span> <span class="n">arr3</span> <span class="o">=</span> <span class="n">arr_intersect</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">size2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">new_sz</span><span class="p">);</span>
-<span class="lineno">436 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;new arr = &quot;</span><span class="p">);</span>
-<span class="lineno">437 </span>                <span class="n">arr_print</span><span class="p">(</span><span class="n">arr3</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">);</span>
-<span class="lineno">438 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr3</span><span class="p">);</span>
-<span class="lineno">439 </span>                <span class="k">break</span><span class="p">;</span>
-<span class="lineno">440 </span>            <span class="p">}</span>
-<span class="lineno">441 </span>            <span class="k">default</span><span class="o">:</span> <span class="p">{</span>
-<span class="lineno">442 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;choice invalid</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">402 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr2</span><span class="p">);</span>
+<span class="lineno">403 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr3</span><span class="p">);</span>
+<span class="lineno">404 </span>                <span class="k">break</span><span class="p">;</span>
+<span class="lineno">405 </span>            <span class="p">}</span>
+<span class="lineno">406 </span>            <span class="c1">// merge</span>
+<span class="lineno">407 </span>            <span class="k">case</span> <span class="mi">8</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno">408 </span>                <span class="kt">size_t</span> <span class="n">size2</span><span class="p">,</span> <span class="n">len2</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">;</span>
+<span class="lineno">409 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter second array max size: &quot;</span><span class="p">);</span>
+<span class="lineno">410 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size2</span><span class="p">);</span>
+<span class="lineno">411 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter no of elements to store: &quot;</span><span class="p">);</span>
+<span class="lineno">412 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">len2</span><span class="p">);</span>
+<span class="lineno">413 </span>                <span class="n">Array</span> <span class="n">arr2</span> <span class="o">=</span> <span class="n">new_array</span><span class="p">(</span><span class="n">size2</span><span class="p">);</span>
+<span class="lineno">414 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter sorted %zu elements = &quot;</span><span class="p">,</span> <span class="n">len2</span><span class="p">);</span>
+<span class="lineno">415 </span>                <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">416 </span>                    <span class="n">scanf</span><span class="p">(</span><span class="n">TYPE_FORMAT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arr2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="lineno">417 </span>                <span class="p">}</span>
+<span class="lineno">418 </span>                <span class="n">Array</span> <span class="n">arr3</span> <span class="o">=</span> <span class="n">arr_merge</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">size2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">new_sz</span><span class="p">);</span>
+<span class="lineno">419 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;new arr = &quot;</span><span class="p">);</span>
+<span class="lineno">420 </span>                <span class="n">arr_print</span><span class="p">(</span><span class="n">arr3</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">);</span>
+<span class="lineno">421 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr2</span><span class="p">);</span>
+<span class="lineno">422 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr3</span><span class="p">);</span>
+<span class="lineno">423 </span>                <span class="k">break</span><span class="p">;</span>
+<span class="lineno">424 </span>            <span class="p">}</span>
+<span class="lineno">425 </span>            <span class="c1">// intersect</span>
+<span class="lineno">426 </span>            <span class="k">case</span> <span class="mi">9</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno">427 </span>                <span class="kt">size_t</span> <span class="n">size2</span><span class="p">,</span> <span class="n">len2</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">;</span>
+<span class="lineno">428 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter second array max size: &quot;</span><span class="p">);</span>
+<span class="lineno">429 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size2</span><span class="p">);</span>
+<span class="lineno">430 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter no of elements to store: &quot;</span><span class="p">);</span>
+<span class="lineno">431 </span>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%zu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">len2</span><span class="p">);</span>
+<span class="lineno">432 </span>                <span class="n">Array</span> <span class="n">arr2</span> <span class="o">=</span> <span class="n">new_array</span><span class="p">(</span><span class="n">size2</span><span class="p">);</span>
+<span class="lineno">433 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;enter sorted %zu elements = &quot;</span><span class="p">,</span> <span class="n">len2</span><span class="p">);</span>
+<span class="lineno">434 </span>                <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">435 </span>                    <span class="n">scanf</span><span class="p">(</span><span class="n">TYPE_FORMAT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arr2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="lineno">436 </span>                <span class="p">}</span>
+<span class="lineno">437 </span>                <span class="n">Array</span> <span class="n">arr3</span> <span class="o">=</span> <span class="n">arr_intersect</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">size2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">new_sz</span><span class="p">);</span>
+<span class="lineno">438 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;new arr = &quot;</span><span class="p">);</span>
+<span class="lineno">439 </span>                <span class="n">arr_print</span><span class="p">(</span><span class="n">arr3</span><span class="p">,</span> <span class="n">new_sz</span><span class="p">);</span>
+<span class="lineno">440 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr2</span><span class="p">);</span>
+<span class="lineno">441 </span>                <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr3</span><span class="p">);</span>
+<span class="lineno">442 </span>                <span class="k">break</span><span class="p">;</span>
 <span class="lineno">443 </span>            <span class="p">}</span>
-<span class="lineno">444 </span>        <span class="p">}</span>
-<span class="lineno">445 </span>        <span class="n">menudrive_iterations</span><span class="o">++</span><span class="p">;</span>
-<span class="lineno">446 </span>    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">choice</span> <span class="o">&amp;&amp;</span> <span class="n">menudrive_iterations</span> <span class="o">&lt;</span> <span class="n">MENUDRIVE_LIMIT</span><span class="p">);</span>
-<span class="lineno">447 </span>    <span class="c1">// MENUDRIVE_LIMIT to avoid an accidental infinite loop due to scanf I/O error</span>
-<span class="lineno">448 </span>    <span class="k">if</span> <span class="p">(</span><span class="n">menudrive_iterations</span> <span class="o">&gt;=</span> <span class="n">MENUDRIVE_LIMIT</span><span class="p">)</span> <span class="p">{</span>
-<span class="lineno">449 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;exceeded menu drive limit of &#39;%zu&#39; iterations</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">MENUDRIVE_LIMIT</span><span class="p">);</span>
-<span class="lineno">450 </span>        <span class="n">exit</span><span class="p">(</span><span class="n">ERR_MENUDRIVELIM</span><span class="p">);</span>
-<span class="lineno">451 </span>    <span class="p">}</span>
-<span class="lineno">452 </span>    <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr</span><span class="p">);</span>
-<span class="lineno">453 </span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="lineno">454 </span><span class="p">}</span>
+<span class="lineno">444 </span>            <span class="k">default</span><span class="o">:</span> <span class="p">{</span>
+<span class="lineno">445 </span>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;choice invalid</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="lineno">446 </span>            <span class="p">}</span>
+<span class="lineno">447 </span>        <span class="p">}</span>
+<span class="lineno">448 </span>        <span class="n">menudrive_iterations</span><span class="o">++</span><span class="p">;</span>
+<span class="lineno">449 </span>    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">choice</span> <span class="o">&amp;&amp;</span> <span class="n">menudrive_iterations</span> <span class="o">&lt;</span> <span class="n">MENUDRIVE_LIMIT</span><span class="p">);</span>
+<span class="lineno">450 </span>    <span class="c1">// MENUDRIVE_LIMIT to avoid an accidental infinite loop due to scanf I/O error</span>
+<span class="lineno">451 </span>    <span class="k">if</span> <span class="p">(</span><span class="n">menudrive_iterations</span> <span class="o">&gt;=</span> <span class="n">MENUDRIVE_LIMIT</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">452 </span>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;exceeded menu drive limit of &#39;%zu&#39; iterations</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">MENUDRIVE_LIMIT</span><span class="p">);</span>
+<span class="lineno">453 </span>        <span class="n">exit</span><span class="p">(</span><span class="n">ERR_MENUDRIVELIM</span><span class="p">);</span>
+<span class="lineno">454 </span>    <span class="p">}</span>
+<span class="lineno">455 </span>    <span class="n">arr_free</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr</span><span class="p">);</span>
+<span class="lineno">456 </span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="lineno">457 </span><span class="p">}</span>
 </pre></div>
 
 </body>

@@ -95,7 +95,7 @@ int *concat(Array A, int l1, int u1, Array B, int l2, int u2, int *l3, int *u3)
     int i, j, k;
     i = j = k = 0;
     *l3 = l1;
-    *u3 = u1 + u2;
+    *u3 = u1 + u2 +1;
     int *C = calloc(sizeof(int), *u3 - *l3 +1);
     while (i <= u1)
         C[k++] = A[i++];
@@ -109,7 +109,7 @@ int *merge(Array A, int l1, int u1, Array B, int l2, int u2, int *l3, int *u3)
     int i, j, k;
     i = j = k = 0;
     *l3 = l1;
-    *u3 = u1 + u2;
+    *u3 = u1 + u2 +1;
     int *C = calloc(sizeof(int), *u3 - *l3 +1);
     while (i <= u1 && j <= u2)
         if (A[i] < B[j])
@@ -130,7 +130,7 @@ int *intersect(Array A, int l1, int u1, Array B, int l2, int u2, int *l3, int *u
     int i, j, k;
     i = j = k = 0;
     *l3 = l1;
-    *u3 = u1 + u2;
+    *u3 = u1 + u2 +1;
     int *C = calloc(sizeof(int), *u3 - *l3 +1);
     while (i <= u1 && j <= u2)
         if (A[i] < B[j])
@@ -156,27 +156,24 @@ int main()
     for (i = u +1; i < ARR_MAX_SZ; i++)
         A[i] = 0;
     do {
-        printf(
-            "\nchoices:\n"
-            "   0: exit\n"
-            "   1: print array\n"
-            "   2: search for matching value\n"
-            "   3: search for every matching value\n"
-            "   4: insert a value\n"
-            "   5: delete value at index\n"
-            "   6: delete every match of a value\n"
-            "   7: concatenate two arrays\n"
-            "   8: merge two sorted arrays\n"
-            "   9: intersection of two sorted arrays\n"
-            "enter your choice: "
-        );
+        printf("\nchoices:\n"
+               "   0: exit\n"
+               "   1: print array\n"
+               "   2: search for matching value\n"
+               "   3: search for every matching value\n"
+               "   4: insert a value\n"
+               "   5: delete value at index\n"
+               "   6: delete every match of a value\n"
+               "   7: concatenate two arrays\n"
+               "   8: merge two sorted arrays\n"
+               "   9: intersection of two sorted arrays\n"
+               "enter your choice: ");
         scanf("%d", &ch);
         printf("\n");
         switch (ch) {
             // exit
-            case 0: {
-                break;
-            }
+            case 0:
+                exit(0);
             // print
             case 1: {
                 printf("A = ");
@@ -296,9 +293,9 @@ int main()
                 free(C);
                 break;
             }
-            default: {
+            default:
                 printf("choice invalid\n");
-            }
+                exit(1);
         }
     } while (ch);
     return 0;
