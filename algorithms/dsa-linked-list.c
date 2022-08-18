@@ -13,14 +13,14 @@ typedef struct {
 } TupleX2;
 
 sllnode new_node(int val);
-sllnode access(sllnode head, size_t index);
-void printsll(sllnode head);
-bool insertAftVal(sllnode head, int searchVal, int val);
-TupleX2 search(sllnode head, int val);
-bool insert(sllnode head, size_t index, int val);
-bool insertAftVal(sllnode head, int searchVal, int val);
-bool delIndex(sllnode head, size_t idx);
-void sllfree(sllnode *head);
+sllnode sll_get(sllnode head, size_t index);
+void sll_print(sllnode head);
+bool sll_insertAftVal(sllnode head, int searchVal, int val);
+TupleX2 sll_search(sllnode head, int val);
+bool sll_insert(sllnode head, size_t index, int val);
+bool sll_insertAftVal(sllnode head, int searchVal, int val);
+bool sll_delIndex(sllnode head, size_t idx);
+void sll_free(sllnode *head);
 
 // allocate a new node
 sllnode new_node(int val)
@@ -32,7 +32,7 @@ sllnode new_node(int val)
     return node;
 }
 
-sllnode access(sllnode head, size_t index)
+sllnode sll_get(sllnode head, size_t index)
 {
     if (!head) return NULL;
     if (index >= head->val) {
@@ -49,7 +49,7 @@ sllnode access(sllnode head, size_t index)
     return p;
 }
 
-void printsll(sllnode head)
+void sll_print(sllnode head)
 {
     if (!head) {
         printf("NULL\n");
@@ -68,7 +68,7 @@ void printsll(sllnode head)
 }
 
 // return the node where target value is located
-TupleX2 search(sllnode head, int val)
+TupleX2 sll_search(sllnode head, int val)
 {
     if (!head) {
         TupleX2 rslt = { NULL, 0 };
@@ -89,7 +89,7 @@ TupleX2 search(sllnode head, int val)
 }
 
 // insert by index, true if successful
-bool insert(sllnode head, size_t index, int val)
+bool sll_insert(sllnode head, size_t index, int val)
 {
     if (!head) return false;
     if (index > head->val) {
@@ -112,10 +112,10 @@ bool insert(sllnode head, size_t index, int val)
 }
 
 // return true if insertion successful
-bool insertAftVal(sllnode head, int searchVal, int val)
+bool sll_insertAftVal(sllnode head, int searchVal, int val)
 {
     if (!head) return false;
-    TupleX2 loc = search(head, searchVal);
+    TupleX2 loc = sll_search(head, searchVal);
     if (!loc.address) return false;
     sllnode p = loc.address;
     sllnode newnode = new_node(val);
@@ -126,7 +126,7 @@ bool insertAftVal(sllnode head, int searchVal, int val)
     return true;
 }
 
-bool delIndex(sllnode head, size_t index)
+bool sll_delIndex(sllnode head, size_t index)
 {
     if (!head) return false;
     if (index >= head->val || !(head->next)) {
@@ -153,7 +153,7 @@ bool delIndex(sllnode head, size_t index)
     return true;
 }
 
-void sllfree(sllnode *head)
+void sll_free(sllnode *head)
 {
     if (!*head) return;
     sllnode p = *head;
@@ -187,7 +187,7 @@ int main()
         switch (ch) {
             // exit
             case 0: {
-                sllfree(&head);
+                sll_free(&head);
                 exit(0);
             }
             // access
@@ -195,14 +195,17 @@ int main()
                 size_t pos;
                 printf("enter posn = ");
                 scanf("%zu", &pos);
-                sllnode node = access(head, pos);
-                printf("value at index %zu = %d\n", pos, node->val);
+                sllnode node = sll_get(head, pos);
+                if (!node)
+                    printf("get failed\n");
+                else
+                    printf("value at index %zu = %d\n", pos, node->val);
                 break;
             }
             // print
             case 2: {
                 printf("sll = ");
-                printsll(head);
+                sll_print(head);
                 printf("length = %d\n", head->val);
                 break;
             }
@@ -211,7 +214,7 @@ int main()
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
-                TupleX2 loc = search(head, val);
+                TupleX2 loc = sll_search(head, val);
                 if (!loc.address)
                     printf("not found\n");
                 else
@@ -226,11 +229,11 @@ int main()
                 scanf("%d", &val);
                 printf("enter posn = ");
                 scanf("%zu", &pos);
-                if (!insert(head, pos, val))
+                if (!sll_insert(head, pos, val))
                     printf("insert failed, no changes made\n");
                 else {
                     printf("modified sll = ");
-                    printsll(head);
+                    sll_print(head);
                 }
                 break;
             }
@@ -238,42 +241,40 @@ int main()
             case 5: {
                 int val, refval;
                 printf("enter value = ");
-                scanf("%d", &refval);
-                printf("enter reference value = ");
                 scanf("%d", &val);
-                if (!insertAftVal(head, refval, val))
+                printf("enter reference value = ");
+                scanf("%d", &refval);
+                if (!sll_insertAftVal(head, refval, val))
                     printf("insert after value failed, no changes made\n");
                 else {
                     printf("modified sll = ");
-                    printsll(head);
+                    sll_print(head);
                 }
                 break;
             }
             // append
             case 6: {
                 int val;
-                size_t pos = head->val;
                 printf("enter value = ");
                 scanf("%d", &val);
-                if (!insert(head, pos, val))
+                if (!sll_insert(head, head->val, val))
                     printf("append failed, no changes made\n");
                 else {
                     printf("modified sll = ");
-                    printsll(head);
+                    sll_print(head);
                 }
                 break;
             }
             // prepend
             case 7: {
                 int val;
-                size_t pos = 0;
                 printf("enter value = ");
                 scanf("%d", &val);
-                if (!insert(head, pos, val))
+                if (!sll_insert(head, 0, val))
                     printf("prepend failed, no changes made\n");
                 else {
                     printf("modified sll = ");
-                    printsll(head);
+                    sll_print(head);
                 }
                 break;
             }
@@ -282,11 +283,11 @@ int main()
                 size_t pos;
                 printf("enter posn = ");
                 scanf("%zu", &pos);
-                if (!delIndex(head, pos))
+                if (!sll_delIndex(head, pos))
                     printf("delete failed, no changes made\n");
                 else {
                     printf("modified sll = ");
-                    printsll(head);
+                    sll_print(head);
                 }
                 break;
             }
@@ -295,6 +296,6 @@ int main()
             }
         }
     } while(true);
-    sllfree(&head);
+    sll_free(&head);
     return 0;
 }
