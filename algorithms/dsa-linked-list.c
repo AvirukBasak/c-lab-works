@@ -16,6 +16,7 @@ sllnode new_node(int val);
 sllnode sll_get(sllnode head, size_t index);
 bool sll_traverse(sllnode head, void(*callback)(size_t index, sllnode node));
 void sll_print(sllnode head);
+bool sll_reverse(sllnode head);
 TupleX2 sll_search(sllnode head, int val);
 bool sll_prepend(sllnode head, int val);
 bool sll_append(sllnode head, int val);
@@ -84,6 +85,12 @@ void sll_print(sllnode head)
         p = p->next;
     }
     printf("}\n");
+}
+
+bool sll_reverse(sllnode head)
+{
+    if (!head) return false;
+    return false;
 }
 
 // return a tuple of index and node where target value is located
@@ -208,14 +215,15 @@ int main()
                "   0: exit\n"
                "   1: access node at index\n"
                "   2: print sllist\n"
-               "   3: search for matching value\n"
-               "   4: prepend value\n"
-               "   5: append value\n"
-               "   6: insert a value\n"
-               "   7: insert a value after another\n"
-               "   8: delete value at index\n"
-               "   9: delete value from left\n"
-               "  10: delete value from right\n"
+               "   3: reverse sllist\n"
+               "   4: search for matching value\n"
+               "   5: prepend value\n"
+               "   6: append value\n"
+               "   7: insert a value\n"
+               "   8: insert a value after another\n"
+               "   9: delete value at index\n"
+               "  10: delete value from left\n"
+               "  11: delete value from right\n"
                "enter your choice: ");
         scanf("%d", &ch);
         printf("\n");
@@ -244,8 +252,18 @@ int main()
                 printf("length = %d\n", head->val);
                 break;
             }
-            // search
+            // reverse
             case 3: {
+                if (!sll_reverse(head))
+                    printf("reverse failed, no changes made\n");
+                else {
+                    printf("modified sll = ");
+                    sll_print(head);
+                }
+                break;
+            }
+            // search
+            case 4: {
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
@@ -257,7 +275,7 @@ int main()
                 break;
             }
             // prepend
-            case 4: {
+            case 5: {
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
@@ -270,7 +288,7 @@ int main()
                 break;
             }
             // append
-            case 5: {
+            case 6: {
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
@@ -283,7 +301,7 @@ int main()
                 break;
             }
             // insert
-            case 6: {
+            case 7: {
                 int val;
                 size_t pos;
                 printf("enter value = ");
@@ -299,7 +317,7 @@ int main()
                 break;
             }
             // insert after
-            case 7: {
+            case 8: {
                 int val, refval;
                 printf("enter value = ");
                 scanf("%d", &val);
@@ -314,7 +332,7 @@ int main()
                 break;
             }
             // delete
-            case 8: {
+            case 9: {
                 size_t pos;
                 printf("enter posn = ");
                 scanf("%zu", &pos);
@@ -327,7 +345,7 @@ int main()
                 break;
             }
             // del left
-            case 9: {
+            case 10: {
                 if (!sll_delLeft(head))
                     printf("delete left failed, no changes made\n");
                 else {
@@ -337,7 +355,7 @@ int main()
                 break;
             }
             // del right
-            case 10: {
+            case 11: {
                 if (!sll_delRight(head))
                     printf("delete right failed, no changes made\n");
                 else {
