@@ -155,7 +155,23 @@ bool sll_insertAftVal(sllnode head, int searchVal, int val)
 
 bool sll_delIndex(sllnode head, size_t index)
 {
-    return false;
+    if (!head || head->val <= 0) return false;
+    if (index >= head->val) {
+        printf("sllist: delIndex: index out of bounds\n");
+        return false;
+    }
+    size_t i;
+    sllnode p = head;
+    for (i = 0; i < index; i++) {
+        if (p->next == NULL)
+            break;
+        p = p->next;
+    }
+    sllnode tmp = p->next;
+    p->next = p->next->next;
+    free(tmp);
+    (head->val)--;
+    return true;
 }
 
 void sll_free(sllnode *head)
