@@ -14,8 +14,8 @@ typedef struct {
 
 sllnode new_node(int val);
 sllnode sll_get(sllnode head, size_t index);
+bool sll_traverse(sllnode head, void(*callback)(size_t index, sllnode node));
 void sll_print(sllnode head);
-bool sll_insertAftVal(sllnode head, int searchVal, int val);
 TupleX2 sll_search(sllnode head, int val);
 bool sll_insert(sllnode head, size_t index, int val);
 bool sll_insertAftVal(sllnode head, int searchVal, int val);
@@ -47,6 +47,19 @@ sllnode sll_get(sllnode head, size_t index)
         p = p->next;
     }
     return p;
+}
+
+bool sll_traverse(sllnode head, void(*callback)(size_t index, sllnode node))
+{
+    if (!head) return false;
+    size_t i = 0;
+    sllnode p = head->next;
+    while (p != NULL) {
+        callback(i, p);
+        p = p->next;
+        i++;
+    }
+    return true;
 }
 
 void sll_print(sllnode head)
@@ -128,29 +141,7 @@ bool sll_insertAftVal(sllnode head, int searchVal, int val)
 
 bool sll_delIndex(sllnode head, size_t index)
 {
-    if (!head) return false;
-    if (index >= head->val || !(head->next)) {
-        printf ("sllist: delIndex: index out of bounds\n");
-        return false;
-    }
-    size_t i;
-    sllnode p = head->next;
-    for (i = 0; i < index; i++) {
-        if (p->next == NULL)
-            break;
-        p = p->next;
-    }
-    if (index == 0 && head->next) {
-        sllnode tmp = head->next;
-        head->next = head->next->next;
-        free(tmp);
-    } else {
-        sllnode tmp = p->next;
-        p->next = p->next ? p->next->next : p->next;
-        free(tmp);
-    }
-    (head->val)--;
-    return true;
+    return false;
 }
 
 void sll_free(sllnode *head)
