@@ -22,6 +22,8 @@ bool sll_append(sllnode head, int val);
 bool sll_insert(sllnode head, size_t index, int val);
 bool sll_insertAftVal(sllnode head, int searchVal, int val);
 bool sll_delIndex(sllnode head, size_t idx);
+bool sll_delLeft(sllnode head);
+bool sll_delRight(sllnode head);
 void sll_free(sllnode *head);
 
 // allocate a new node
@@ -174,6 +176,16 @@ bool sll_delIndex(sllnode head, size_t index)
     return true;
 }
 
+bool sll_delLeft(sllnode head)
+{
+    return sll_delIndex(head, 0);
+}
+
+bool sll_delRight(sllnode head)
+{
+    return sll_delIndex(head, head->val -1);
+}
+
 void sll_free(sllnode *head)
 {
     if (!*head) return;
@@ -202,6 +214,8 @@ int main()
                "   6: insert a value\n"
                "   7: insert a value after another\n"
                "   8: delete value at index\n"
+               "   9: delete value from left\n"
+               "  10: delete value from right\n"
                "enter your choice: ");
         scanf("%d", &ch);
         printf("\n");
@@ -306,6 +320,26 @@ int main()
                 scanf("%zu", &pos);
                 if (!sll_delIndex(head, pos))
                     printf("delete failed, no changes made\n");
+                else {
+                    printf("modified sll = ");
+                    sll_print(head);
+                }
+                break;
+            }
+            // del left
+            case 9: {
+                if (!sll_delLeft(head))
+                    printf("delete left failed, no changes made\n");
+                else {
+                    printf("modified sll = ");
+                    sll_print(head);
+                }
+                break;
+            }
+            // del right
+            case 10: {
+                if (!sll_delRight(head))
+                    printf("delete right failed, no changes made\n");
                 else {
                     printf("modified sll = ");
                     sll_print(head);
