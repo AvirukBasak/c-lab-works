@@ -89,8 +89,14 @@ void sll_print(sllnode head)
 
 bool sll_reverse(sllnode head)
 {
-    if (!head) return false;
-    return false;
+    if (!head || !head->next) return false;
+    size_t i;
+    for (i = 0; i < head->val / 2; i++) {
+        int tmp = sll_get(head, i)->val;
+        sll_get(head, i)->val = sll_get(head, head->val -i -1)->val;
+        sll_get(head, head->val -i -1)->val = tmp;
+    }
+    return true;
 }
 
 // return a tuple of index and node where target value is located
