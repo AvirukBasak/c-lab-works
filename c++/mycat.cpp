@@ -35,11 +35,11 @@ int main(int argc, char **argv)
         exit(0);
     }
     for (; i < argc; i++) {
-        std::ifstream file;
+        auto file;
         if (cinStdin)
-            file = (std::ifstream) std::cin;
+            file = std::cin;
         else
-            file.open(argv[i]);
+            file = new std::ifstream(argv[i]);
         std::string line = "";
         while (getline(file, line)) {
             showLinNum && std::cout << lineno++ << "\t";
