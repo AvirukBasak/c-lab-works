@@ -16,7 +16,7 @@ bool printError()
 
 int main(int argc, char **argv)
 {
-    int i = 0, lineno = 1;
+    int i = 1, lineno = 1;
     bool showLinNum = false;
     argc < 2 && printError();
     if (!std::strcmp(argv[1], "-n") || !std::strcmp(argv[1], "--lineno")) {
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
         std::cout << "License: MIT\n";
         exit(0);
     }
-    for (i = 1; i < argc; i++) {
+    for (; i < argc; i++) {
         std::ifstream file(argv[i]);
         std::string line = "";
         while (getline(file, line)) {
