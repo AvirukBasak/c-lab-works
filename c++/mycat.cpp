@@ -36,6 +36,7 @@ int main(int argc, char **argv)
             showLinNum && std::cout << lineno++ << "\t";
             std::cout << line << "\n";
         }
+        file.close();
     }
     return 0;
 }
