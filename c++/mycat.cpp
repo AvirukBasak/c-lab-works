@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     for (; i < argc; i++) {
         std::ifstream file;
         if (cinStdin)
-            file = std::cin;
+            file = (std::ifstream) std::cin;
         else
             file.open(argv[i]);
         std::string line = "";
