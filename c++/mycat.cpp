@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         exit(0);
     }
     for (; i < argc; i++) {
-        std::istream file;
+        std::ifstream *file;
         if (cinStdin)
             file = std::cin;
         else
