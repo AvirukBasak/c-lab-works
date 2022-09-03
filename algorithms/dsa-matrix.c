@@ -54,8 +54,13 @@ void mtx_nullPtrCheck(char *fname, Matrix mtx)
 Matrix new_matrix(size_t rows, size_t cols)
 {
     Matrix mtx = malloc(sizeof(struct Matrix));
-    mtx_nullPtrCheck("new1", mtx);
+    if (!mtx) {
+        printf("matrix: new1: null pointer\n");
+        exit(ERR_NULLPTR);
+    }
     mtx->ptr = malloc(rows * cols * sizeof(MatrixType));
+    mtx->rows = rows;
+    mtx->cols = cols;
     mtx_nullPtrCheck("new2", mtx);
     return mtx;
 }
@@ -87,7 +92,7 @@ void mtx_print(Matrix mtx)
     size_t i, j;
     for (i = 0; i < mtx->rows; i++) {
         for (j = 0; j < mtx->cols; j++)
-            printf("%zu: " TYPE_FORMAT "\t", j, mtx_get(mtx, i, j));
+            printf(TYPE_FORMAT "\t", mtx_get(mtx, i, j));
         printf("\n");
     }
 }
@@ -125,7 +130,7 @@ Matrix mtx_add(Matrix mtx1, Matrix mtx2)
     for (i = 0; i < rmtx->rows; i++) {
         for (j = 0; j < rmtx->cols; j++) {
             MatrixType sum = mtx_get(mtx1, i, j) + mtx_get(mtx2, i, j);
-            set_mtx(rmtx, i, j, sum);
+            mtx_set(rmtx, i, j, sum);
         }
     }
     return rmtx;
@@ -139,7 +144,7 @@ Matrix mtx_scale(Matrix mtx, MatrixType scalar)
     for (i = 0; i < rmtx->rows; i++) {
         for (j = 0; j < rmtx->cols; j++) {
             MatrixType prod = mtx_get(mtx, i, j) * scalar;
-            set_mtx(rmtx, i, j, prod);
+            mtx_set(rmtx, i, j, prod);
         }
     }
     return rmtx;
@@ -149,6 +154,21 @@ Matrix mtx_multiply(Matrix mtx1, Matrix mtx2)
 {
     mtx_nullPtrCheck("multiply", mtx1);
     mtx_nullPtrCheck("multiply", mtx2);
+    if (mtx1->cols != mtx2->rows) {
+        printf("matrix: multiply: incompatible matrices\n");
+        exit(ERR_MATINCOM);
+    }
+    size_t i, j, k;
+    Matrix rmtx = new_matrix(mtx1->rows, mtx2->cols);
+    for (i = 0; i < mtx1->rows; i++) {
+        for (j = 0; j < mtx2->cols; j++) {
+            MatrixType sum = 0;
+            for (k = 0; k < mtx1->cols; k++)
+                sum += mtx_get(mtx1, i, k) * mtx_get(mtx2, k, j);
+            mtx_set(rmtx, i, j, sum);
+        }
+    }
+    return rmtx;
 }
 
 Matrix mtx_transpose(Matrix mtx)
@@ -179,13 +199,14 @@ int main()
     scanf("%zu", &rows);
     scanf("%zu", &cols);
     Matrix mtx = new_matrix(rows, cols);
-    for (i = 0; i < mtx->rows; i++)
+    for (i = 0; i < mtx->rows; i++) {
         printf("row %zu = ", i);
         for (j = 0; j < mtx->cols; j++) {
             MatrixType val;
             scanf(TYPE_FORMAT, &val);
             mtx_set(mtx, i, j, val);
         }
+    }
     do {
         printf(
             "\nchoices:\n"
@@ -207,7 +228,6 @@ int main()
             }
             // print
             case 1: {
-                printf("mtx  = ");
                 mtx_print(mtx);
                 printf("size = %zu x %zu\n", mtx-> rows, mtx->cols);
                 break;
@@ -233,6 +253,53 @@ int main()
                 mtx_set(mtx, row, col, val);
                 break;
             }
+            // add
+            case 4: {
+                printf("enter new matrix rows and cols: ");
+                scanf("%zu", &rows);
+                scanf("%zu", &cols);
+                Matrix mtx2 = new_matrix(rows, cols);
+                for (i = 0; i < mtx2->rows; i++) {
+                    printf("new matrix row %zu = ", i);
+                    for (j = 0; j < mtx2->cols; j++) {
+                        MatrixType val;
+                        scanf(TYPE_FORMAT, &val);
+                        mtx_set(mtx2, i, j, val);
+                    }
+                }
+                Matrix rmtx = mtx_add(mtx, mtx2);
+                mtx_print(rmtx);
+                mtx_free(&rmtx);
+                mtx_free(&mtx2);
+                break;
+            }
+            // multiply
+            case 5: {
+                printf("enter new matrix rows and cols: ");
+                scanf("%zu", &rows);
+                scanf("%zu", &cols);
+                Matrix mtx2 = new_matrix(rows, cols);
+                for (i = 0; i < mtx2->rows; i++) {
+                    printf("new matrix row %zu = ", i);
+                    for (j = 0; j < mtx2->cols; j++) {
+                        MatrixType val;
+                        scanf(TYPE_FORMAT, &val);
+                        mtx_set(mtx2, i, j, val);
+                    }
+                }
+                Matrix rmtx = mtx_multiply(mtx, mtx2);
+                mtx_print(rmtx);
+                mtx_free(&rmtx);
+                mtx_free(&mtx2);
+                break;
+            }
+            // transpose
+            case 6: {
+                Matrix tmtx = mtx_transpose(mtx);
+                mtx_print(tmtx);
+                mtx_free(&tmtx);
+                break;
+            }
             default: {
                 printf("choice invalid\n");
             }
@@ -241,3 +308,88 @@ int main()
     mtx_free(&mtx);
     return 0;
 }
+
+/* OUTPUT:
+
+run: dsa-matrix.c
+enter matrix rows and cols: 3 3
+row 0 = 1 2 3
+row 1 = 4 5 6
+row 2 = 7 8 9
+
+choices:
+   0: exit
+   1: print matrix
+   2: read an index
+   3: modify an index
+   4: add 2 matrices
+   5: multiply 2 matrices
+   6: compute transpose
+enter your choice: 4
+
+enter new matrix rows and cols: 3 3 
+new matrix row 0 = 2 2 2
+new matrix row 1 = 3 3 3
+new matrix row 2 = 4 4 4
+3	4	5	
+7	8	9	
+11	12	13	
+
+choices:
+   0: exit
+   1: print matrix
+   2: read an index
+   3: modify an index
+   4: add 2 matrices
+   5: multiply 2 matrices
+   6: compute transpose
+enter your choice: 1
+
+1	2	3	
+4	5	6	
+7	8	9	
+size = 3 x 3
+
+choices:
+   0: exit
+   1: print matrix
+   2: read an index
+   3: modify an index
+   4: add 2 matrices
+   5: multiply 2 matrices
+   6: compute transpose
+enter your choice: 6
+
+1	4	7	
+2	5	8	
+3	6	9	
+
+choices:
+   0: exit
+   1: print matrix
+   2: read an index
+   3: modify an index
+   4: add 2 matrices
+   5: multiply 2 matrices
+   6: compute transpose
+enter your choice: 5
+
+enter new matrix rows and cols: 3 2
+new matrix row 0 = 1 2
+new matrix row 1 = 3 4
+new matrix row 2 = 5 6
+22	28	
+49	64	
+76	100	
+
+choices:
+   0: exit
+   1: print matrix
+   2: read an index
+   3: modify an index
+   4: add 2 matrices
+   5: multiply 2 matrices
+   6: compute transpose
+enter your choice: 0
+
+*/
