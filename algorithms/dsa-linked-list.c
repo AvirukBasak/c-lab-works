@@ -1,3 +1,9 @@
+/**
+ * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
+ * @topic   Singly linked list implementation in C
+ * @date    5-8-2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

@@ -2,7 +2,7 @@
  * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
  * @topic   Matrix data structure implemented in C using a 1D matrix
  * @date    29-7-2022
- * @cc      gcc -Wall -D MTX_TYPE=int -D TYPE_FORMAT='"%d"' -o dsa-int-Matrix dsa-Matrix.c
+ * @cc      gcc -Wall -D MTX_TYPE=int -D TYPE_FORMAT='"%d"' -o dsa-int-Matrix dsa-matrix.c
  */
 
 # include <stdio.h>
@@ -327,13 +327,13 @@ choices:
    6: compute transpose
 enter your choice: 4
 
-enter new matrix rows and cols: 3 3 
+enter new matrix rows and cols: 3 3
 new matrix row 0 = 2 2 2
 new matrix row 1 = 3 3 3
 new matrix row 2 = 4 4 4
-3	4	5	
-7	8	9	
-11	12	13	
+3	4	5
+7	8	9
+11	12	13
 
 choices:
    0: exit
@@ -345,9 +345,9 @@ choices:
    6: compute transpose
 enter your choice: 1
 
-1	2	3	
-4	5	6	
-7	8	9	
+1	2	3
+4	5	6
+7	8	9
 size = 3 x 3
 
 choices:
@@ -360,9 +360,9 @@ choices:
    6: compute transpose
 enter your choice: 6
 
-1	4	7	
-2	5	8	
-3	6	9	
+1	4	7
+2	5	8
+3	6	9
 
 choices:
    0: exit
@@ -378,9 +378,9 @@ enter new matrix rows and cols: 3 2
 new matrix row 0 = 1 2
 new matrix row 1 = 3 4
 new matrix row 2 = 5 6
-22	28	
-49	64	
-76	100	
+22	28
+49	64
+76	100
 
 choices:
    0: exit
