@@ -105,7 +105,7 @@ bool sll_reverse(sllnode head)
 // return a tuple of index and node where target value is located
 TupleX3 sll_search(sllnode head, int val)
 {
-    if (!head) {
+    if (!head || !head->next) {
         TupleX3 rslt = { NULL, NULL, 0 };
         return rslt;
     }
@@ -123,9 +123,47 @@ TupleX3 sll_search(sllnode head, int val)
     return rslt;
 }
 
-TupleX3 sll_getmin(sllnode head);
+TupleX3 sll_getmin(sllnode head)
+{
+    if (!head || !head->next) {
+        TupleX3 tuple = { NULL, NULL, 0 };
+        return tuple;
+    }
+    sllnode p = head->next;
+    sllnode before_min = head;
+    size_t i = 0, pos = i;
+    while (p->next != NULL) {
+        if (p->next->val < before_min->next->val) {
+            before_min = p;
+            pos = i +1;
+        }
+        p = p->next;
+        i++;
+    }
+    TupleX3 tuple = { before_min, before_min->next, pos };
+    return tuple;
+}
 
-TupleX3 sll_getmax(sllnode head);
+TupleX3 sll_getmax(sllnode head)
+{
+    if (!head || !head->next) {
+        TupleX3 tuple = { NULL, NULL, 0 };
+        return tuple;
+    }
+    sllnode p = head->next;
+    sllnode before_max = head;
+    size_t i = 0, pos = i;
+    while (p->next != NULL) {
+        if (p->next->val > before_max->next->val) {
+            before_max = p;
+            pos = i +1;
+        }
+        p = p->next;
+        i++;
+    }
+    TupleX3 tuple = { before_max, before_max->next, pos };
+    return tuple;
+}
 
 bool sll_prepend(sllnode head, int val)
 {
@@ -202,9 +240,11 @@ bool sll_delValue(sllnode head, int val)
     TupleX3 tuple = sll_search(head, val);
     sllnode p = tuple.prev;
     sllnode tmp = tuple.this;
+    if (!tmp) return false;
     p->next = p->next->next;
     free(tmp);
-    return false;
+    (head->val)--;
+    return true;
 }
 
 bool sll_delLeft(sllnode head)
@@ -235,7 +275,7 @@ int main()
     // head->val contains length of linked list
     sllnode head = new_node(0);
     do {
-        printf("\nchoices:\n"
+        printf("choices:\n"
                "   0: exit\n"
                "   1: access node at index\n"
                "   2: print sllist\n"
@@ -418,3 +458,264 @@ int main()
     sll_free(&head);
     return 0;
 }
+
+/* OUTPUT:
+
+run: dsa-linked-list.c
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 1
+modified sll = { 1 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 5
+modified sll = { 1, 5 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = -4
+modified sll = { 1, 5, -4 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 3
+modified sll = { 1, 5, -4, 3 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 7
+modified sll = { 1, 5, -4, 3, 7 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 1
+modified sll = { 1, 5, -4, 3, 7, 1 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 8
+modified sll = { 1, 5, -4, 3, 7, 1, 8 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 2
+
+sll = { 1, 5, -4, 3, 7, 1, 8 }
+length = 7
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 4
+
+min = -4 at index = 2
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 5
+
+max = 8 at index = 6
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 11
+
+enter value = -4
+modified sll = { 1, 5, 3, 7, 1, 8 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 9
+
+enter value = 78
+enter reference value = 7
+modified sll = { 1, 5, 3, 7, 78, 1, 8 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print sllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 0
+
+*/
