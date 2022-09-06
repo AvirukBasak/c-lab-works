@@ -1,45 +1,45 @@
 /**
  * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
- * @topic   Singly linked list implementation in C
- * @date    5-8-2022
+ * @topic   Circular linked list implementation in C
+ * @date    7-9-2022
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct sllnode {
+typedef struct csllnode {
     int val;
-    struct sllnode *next;
-} *sllnode;
+    struct csllnode *next;
+} *csllnode;
 
 typedef struct TupleX3 {
-    sllnode prev;
-    sllnode this;
+    csllnode prev;
+    csllnode this;
     size_t index;
 } TupleX3;
 
-sllnode new_node(int val);
-sllnode sll_get(sllnode head, size_t index);
-bool sll_traverse(sllnode head, void(*callback)(size_t index, sllnode node));
-void sll_print(sllnode head);
-TupleX3 sll_search(sllnode head, int val);
-TupleX3 sll_getmin(sllnode head);
-TupleX3 sll_getmax(sllnode head);
-bool sll_prepend(sllnode head, int val);
-bool sll_append(sllnode head, int val);
-bool sll_insert(sllnode head, size_t index, int val);
-bool sll_insertAftVal(sllnode head, int searchVal, int val);
-bool sll_delIndex(sllnode head, size_t idx);
-bool sll_delValue(sllnode head, int val);
-bool sll_delLeft(sllnode head);
-bool sll_delRight(sllnode head);
-void sll_free(sllnode *head);
+csllnode new_node(int val);
+csllnode csll_get(csllnode head, size_t index);
+bool csll_traverse(csllnode head, void(*callback)(size_t index, csllnode node));
+void csll_print(csllnode head);
+TupleX3 csll_search(csllnode head, int val);
+TupleX3 csll_getmin(csllnode head);
+TupleX3 csll_getmax(csllnode head);
+bool csll_prepend(csllnode head, int val);
+bool csll_append(csllnode head, int val);
+bool csll_insert(csllnode head, size_t index, int val);
+bool csll_insertAftVal(csllnode head, int searchVal, int val);
+bool csll_delIndex(csllnode head, size_t idx);
+bool csll_delValue(csllnode head, int val);
+bool csll_delLeft(csllnode head);
+bool csll_delRight(csllnode head);
+void csll_free(csllnode *head);
 
 // allocate a new node
-sllnode new_node(int val)
+csllnode new_node(int val)
 {
-    sllnode node = calloc(1, sizeof(struct sllnode));
+    csllnode node = calloc(1, sizeof(struct csllnode));
     if (!node) return node;
     node->val = val;
     node->next = NULL;
@@ -47,30 +47,30 @@ sllnode new_node(int val)
 }
 
 // get node of an index
-sllnode sll_get(sllnode head, size_t index)
+csllnode csll_get(csllnode head, size_t index)
 {
     if (!head) return NULL;
     if (index >= head->val) {
-        printf ("sllist: access: index out of bounds\n");
+        printf ("csllist: access: index out of bounds\n");
         return NULL;
     }
     size_t i;
-    sllnode p = head;
+    csllnode p = head;
     for (i = 0; i <= index; i++) {
-        if (p->next == NULL)
+        if (p->next == head)
             break;
         p = p->next;
     }
     return p;
 }
 
-// traverse sll by using a callback method
-bool sll_traverse(sllnode head, void(*callback)(size_t index, sllnode node))
+// traverse csll by using a callback method
+bool csll_traverse(csllnode head, void(*callback)(size_t index, csllnode node))
 {
     if (!head) return false;
     size_t i = 0;
-    sllnode p = head->next;
-    while (p != NULL) {
+    csllnode p = head->next;
+    while (p != head) {
         callback(i, p);
         p = p->next;
         i++;
@@ -78,7 +78,7 @@ bool sll_traverse(sllnode head, void(*callback)(size_t index, sllnode node))
     return true;
 }
 
-void sll_print(sllnode head)
+void csll_print(csllnode head)
 {
     if (!head) {
         printf("NULL\n");
@@ -87,25 +87,25 @@ void sll_print(sllnode head)
         printf("{}\n");
         return;
     }
-    sllnode p = head->next;
+    csllnode p = head->next;
     printf("{ ");
-    while (p != NULL) {
-        printf("%d%s", p->val, p->next ? ", " : " ");
+    while (p != head) {
+        printf("%d%s", p->val, p->next != head ? ", " : " ");
         p = p->next;
     }
     printf("}\n");
 }
 
 // return a tuple of index and node where target value is located
-TupleX3 sll_search(sllnode head, int val)
+TupleX3 csll_search(csllnode head, int val)
 {
     if (!head || !head->next) {
         TupleX3 rslt = { NULL, NULL, 0 };
         return rslt;
     }
-    sllnode p = head;
+    csllnode p = head;
     size_t i = 0;
-    while (p->next != NULL) {
+    while (p->next != head) {
         if (p->next->val == val) {
             TupleX3 rslt = { p, p->next, i };
             return rslt;
@@ -117,16 +117,16 @@ TupleX3 sll_search(sllnode head, int val)
     return rslt;
 }
 
-TupleX3 sll_getmin(sllnode head)
+TupleX3 csll_getmin(csllnode head)
 {
     if (!head || !head->next) {
         TupleX3 tuple = { NULL, NULL, 0 };
         return tuple;
     }
-    sllnode p = head->next;
-    sllnode before_min = head;
+    csllnode p = head->next;
+    csllnode before_min = head;
     size_t i = 0, pos = i;
-    while (p->next != NULL) {
+    while (p->next != head) {
         if (p->next->val < before_min->next->val) {
             before_min = p;
             pos = i +1;
@@ -138,16 +138,16 @@ TupleX3 sll_getmin(sllnode head)
     return tuple;
 }
 
-TupleX3 sll_getmax(sllnode head)
+TupleX3 csll_getmax(csllnode head)
 {
     if (!head || !head->next) {
         TupleX3 tuple = { NULL, NULL, 0 };
         return tuple;
     }
-    sllnode p = head->next;
-    sllnode before_max = head;
+    csllnode p = head->next;
+    csllnode before_max = head;
     size_t i = 0, pos = i;
-    while (p->next != NULL) {
+    while (p->next != head) {
         if (p->next->val > before_max->next->val) {
             before_max = p;
             pos = i +1;
@@ -159,32 +159,32 @@ TupleX3 sll_getmax(sllnode head)
     return tuple;
 }
 
-bool sll_prepend(sllnode head, int val)
+bool csll_prepend(csllnode head, int val)
 {
-    return sll_insert(head, 0, val);
+    return csll_insert(head, 0, val);
 }
 
-bool sll_append(sllnode head, int val)
+bool csll_append(csllnode head, int val)
 {
-    return sll_insert(head, head->val, val);
+    return csll_insert(head, head->val, val);
 }
 
 // insert by index, true if successful
-bool sll_insert(sllnode head, size_t index, int val)
+bool csll_insert(csllnode head, size_t index, int val)
 {
     if (!head) return false;
     if (index > head->val) {
-        printf ("sllist: insert: index out of bounds\n");
+        printf ("csllist: insert: index out of bounds\n");
         return false;
     }
     size_t i;
-    sllnode p = head;
+    csllnode p = head;
     for (i = 0; i < index; i++) {
-        if (p->next == NULL)
+        if (p->next == head)
             break;
         p = p->next;
     }
-    sllnode newnode = new_node(val);
+    csllnode newnode = new_node(val);
     if (!newnode) return false;
     newnode->next = p->next;
     p->next = newnode;
@@ -193,13 +193,13 @@ bool sll_insert(sllnode head, size_t index, int val)
 }
 
 // return true if insertion successful
-bool sll_insertAftVal(sllnode head, int searchVal, int val)
+bool csll_insertAftVal(csllnode head, int searchVal, int val)
 {
     if (!head) return false;
-    TupleX3 loc = sll_search(head, searchVal);
+    TupleX3 loc = csll_search(head, searchVal);
     if (!loc.this) return false;
-    sllnode p = loc.this;
-    sllnode newnode = new_node(val);
+    csllnode p = loc.this;
+    csllnode newnode = new_node(val);
     if (!newnode) return false;
     newnode->next = p->next;
     p->next = newnode;
@@ -207,33 +207,33 @@ bool sll_insertAftVal(sllnode head, int searchVal, int val)
     return true;
 }
 
-bool sll_delIndex(sllnode head, size_t index)
+bool csll_delIndex(csllnode head, size_t index)
 {
     if (!head || head->val <= 0) return false;
     if (index >= head->val) {
-        printf("sllist: delIndex: index out of bounds\n");
+        printf("csllist: delIndex: index out of bounds\n");
         return false;
     }
     size_t i;
-    sllnode p = head;
+    csllnode p = head;
     for (i = 0; i < index; i++) {
-        if (p->next == NULL)
+        if (p->next == head)
             break;
         p = p->next;
     }
-    sllnode tmp = p->next;
+    csllnode tmp = p->next;
     p->next = p->next->next;
     free(tmp);
     (head->val)--;
     return true;
 }
 
-bool sll_delValue(sllnode head, int val)
+bool csll_delValue(csllnode head, int val)
 {
     if (!head || head->val <= 0) return false;
-    TupleX3 tuple = sll_search(head, val);
-    sllnode p = tuple.prev;
-    sllnode tmp = tuple.this;
+    TupleX3 tuple = csll_search(head, val);
+    csllnode p = tuple.prev;
+    csllnode tmp = tuple.this;
     if (!tmp) return false;
     p->next = p->next->next;
     free(tmp);
@@ -241,22 +241,22 @@ bool sll_delValue(sllnode head, int val)
     return true;
 }
 
-bool sll_delLeft(sllnode head)
+bool csll_delLeft(csllnode head)
 {
-    return sll_delIndex(head, 0);
+    return csll_delIndex(head, 0);
 }
 
-bool sll_delRight(sllnode head)
+bool csll_delRight(csllnode head)
 {
-    return sll_delIndex(head, head->val -1);
+    return csll_delIndex(head, head->val -1);
 }
 
-void sll_free(sllnode *head)
+void csll_free(csllnode *head)
 {
     if (!*head) return;
-    sllnode p = *head;
-    while (p != NULL) {
-        sllnode tmp = p->next;
+    csllnode p = *head;
+    while (p != *head) {
+        csllnode tmp = p->next;
         free(p);
         p = tmp;
     }
@@ -267,12 +267,14 @@ int main()
 {
     int ch;
     // head->val contains length of linked list
-    sllnode head = new_node(0);
+    csllnode head = new_node(0);
+    // creating circular reference
+    head->next = head;
     do {
         printf("\nchoices:\n"
                "   0: exit\n"
                "   1: access node at index\n"
-               "   2: print sllist\n"
+               "   2: print csllist\n"
                "   3: search for matching value\n"
                "   4: find minimum element\n"
                "   5: find maximum element\n"
@@ -297,7 +299,7 @@ int main()
                 size_t pos;
                 printf("enter posn = ");
                 scanf("%zu", &pos);
-                sllnode node = sll_get(head, pos);
+                csllnode node = csll_get(head, pos);
                 if (!node)
                     printf("get failed\n");
                 else
@@ -306,8 +308,8 @@ int main()
             }
             // print
             case 2: {
-                printf("sll = ");
-                sll_print(head);
+                printf("csll = ");
+                csll_print(head);
                 printf("length = %d\n", head->val);
                 break;
             }
@@ -316,7 +318,7 @@ int main()
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
-                TupleX3 loc = sll_search(head, val);
+                TupleX3 loc = csll_search(head, val);
                 if (!loc.this)
                     printf("not found\n");
                 else
@@ -325,7 +327,7 @@ int main()
             }
             // find min
             case 4: {
-                TupleX3 loc = sll_getmin(head);
+                TupleX3 loc = csll_getmin(head);
                 if (!loc.this)
                     printf("not found\n");
                 else
@@ -334,7 +336,7 @@ int main()
             }
             // find max
             case 5: {
-                TupleX3 loc = sll_getmax(head);
+                TupleX3 loc = csll_getmax(head);
                 if (!loc.this)
                     printf("not found\n");
                 else
@@ -346,11 +348,11 @@ int main()
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
-                if (!sll_prepend(head, val))
+                if (!csll_prepend(head, val))
                     printf("prepend failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
@@ -359,11 +361,11 @@ int main()
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
-                if (!sll_append(head, val))
+                if (!csll_append(head, val))
                     printf("append failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
@@ -375,11 +377,11 @@ int main()
                 scanf("%d", &val);
                 printf("enter posn = ");
                 scanf("%zu", &pos);
-                if (!sll_insert(head, pos, val))
+                if (!csll_insert(head, pos, val))
                     printf("insert failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
@@ -390,11 +392,11 @@ int main()
                 scanf("%d", &val);
                 printf("enter reference value = ");
                 scanf("%d", &refval);
-                if (!sll_insertAftVal(head, refval, val))
+                if (!csll_insertAftVal(head, refval, val))
                     printf("insert after value failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
@@ -403,11 +405,11 @@ int main()
                 size_t pos;
                 printf("enter posn = ");
                 scanf("%zu", &pos);
-                if (!sll_delIndex(head, pos))
+                if (!csll_delIndex(head, pos))
                     printf("delete failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
@@ -416,31 +418,31 @@ int main()
                 int val;
                 printf("enter value = ");
                 scanf("%d", &val);
-                if (!sll_delValue(head, val))
+                if (!csll_delValue(head, val))
                     printf("delete failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
             // del left
             case 12: {
-                if (!sll_delLeft(head))
+                if (!csll_delLeft(head))
                     printf("delete left failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
             // del right
             case 13: {
-                if (!sll_delRight(head))
+                if (!csll_delRight(head))
                     printf("delete right failed, no changes made\n");
                 else {
-                    printf("modified sll = ");
-                    sll_print(head);
+                    printf("modified csll = ");
+                    csll_print(head);
                 }
                 break;
             }
@@ -449,157 +451,16 @@ int main()
             }
         }
     } while(ch);
-    sll_free(&head);
+    csll_free(&head);
     return 0;
 }
 
 /* OUTPUT:
 
-run: dsa-linked-list.c
 choices:
    0: exit
    1: access node at index
-   2: print sllist
-   3: search for matching value
-   4: find minimum element
-   5: find maximum element
-   6: prepend value
-   7: append value
-   8: insert a value
-   9: insert a value after another
-  10: delete at index
-  11: delete by value
-  12: delete value from left
-  13: delete value from right
-enter your choice: 7
-
-enter value = 1
-modified sll = { 1 }
-
-choices:
-   0: exit
-   1: access node at index
-   2: print sllist
-   3: search for matching value
-   4: find minimum element
-   5: find maximum element
-   6: prepend value
-   7: append value
-   8: insert a value
-   9: insert a value after another
-  10: delete at index
-  11: delete by value
-  12: delete value from left
-  13: delete value from right
-enter your choice: 7
-
-enter value = 5
-modified sll = { 1, 5 }
-
-choices:
-   0: exit
-   1: access node at index
-   2: print sllist
-   3: search for matching value
-   4: find minimum element
-   5: find maximum element
-   6: prepend value
-   7: append value
-   8: insert a value
-   9: insert a value after another
-  10: delete at index
-  11: delete by value
-  12: delete value from left
-  13: delete value from right
-enter your choice: 7
-
-enter value = -4
-modified sll = { 1, 5, -4 }
-
-choices:
-   0: exit
-   1: access node at index
-   2: print sllist
-   3: search for matching value
-   4: find minimum element
-   5: find maximum element
-   6: prepend value
-   7: append value
-   8: insert a value
-   9: insert a value after another
-  10: delete at index
-  11: delete by value
-  12: delete value from left
-  13: delete value from right
-enter your choice: 7
-
-enter value = 3
-modified sll = { 1, 5, -4, 3 }
-
-choices:
-   0: exit
-   1: access node at index
-   2: print sllist
-   3: search for matching value
-   4: find minimum element
-   5: find maximum element
-   6: prepend value
-   7: append value
-   8: insert a value
-   9: insert a value after another
-  10: delete at index
-  11: delete by value
-  12: delete value from left
-  13: delete value from right
-enter your choice: 7
-
-enter value = 7
-modified sll = { 1, 5, -4, 3, 7 }
-
-choices:
-   0: exit
-   1: access node at index
-   2: print sllist
-   3: search for matching value
-   4: find minimum element
-   5: find maximum element
-   6: prepend value
-   7: append value
-   8: insert a value
-   9: insert a value after another
-  10: delete at index
-  11: delete by value
-  12: delete value from left
-  13: delete value from right
-enter your choice: 7
-
-enter value = 1
-modified sll = { 1, 5, -4, 3, 7, 1 }
-
-choices:
-   0: exit
-   1: access node at index
-   2: print sllist
-   3: search for matching value
-   4: find minimum element
-   5: find maximum element
-   6: prepend value
-   7: append value
-   8: insert a value
-   9: insert a value after another
-  10: delete at index
-  11: delete by value
-  12: delete value from left
-  13: delete value from right
-enter your choice: 7
-
-enter value = 8
-modified sll = { 1, 5, -4, 3, 7, 1, 8 }
-
-choices:
-   0: exit
-   1: access node at index
-   2: print sllist
+   2: print csllist
    3: search for matching value
    4: find minimum element
    5: find maximum element
@@ -613,13 +474,173 @@ choices:
   13: delete value from right
 enter your choice: 2
 
-sll = { 1, 5, -4, 3, 7, 1, 8 }
+csll = {}
+length = 0
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 23
+modified csll = { 23 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 87
+modified csll = { 23, 87 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 23
+modified csll = { 23, 87, 23 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 986
+modified csll = { 23, 87, 23, 986 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 12312
+modified csll = { 23, 87, 23, 986, 12312 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 43
+modified csll = { 23, 87, 23, 986, 12312, 43 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 7
+
+enter value = 889
+modified csll = { 23, 87, 23, 986, 12312, 43, 889 }
+
+choices:
+   0: exit
+   1: access node at index
+   2: print csllist
+   3: search for matching value
+   4: find minimum element
+   5: find maximum element
+   6: prepend value
+   7: append value
+   8: insert a value
+   9: insert a value after another
+  10: delete at index
+  11: delete by value
+  12: delete value from left
+  13: delete value from right
+enter your choice: 2
+
+csll = { 23, 87, 23, 986, 12312, 43, 889 }
 length = 7
 
 choices:
    0: exit
    1: access node at index
-   2: print sllist
+   2: print csllist
    3: search for matching value
    4: find minimum element
    5: find maximum element
@@ -633,12 +654,12 @@ choices:
   13: delete value from right
 enter your choice: 4
 
-min = -4 at index = 2
+min = 23 at index = 0
 
 choices:
    0: exit
    1: access node at index
-   2: print sllist
+   2: print csllist
    3: search for matching value
    4: find minimum element
    5: find maximum element
@@ -652,12 +673,12 @@ choices:
   13: delete value from right
 enter your choice: 5
 
-max = 8 at index = 6
+max = 12312 at index = 4
 
 choices:
    0: exit
    1: access node at index
-   2: print sllist
+   2: print csllist
    3: search for matching value
    4: find minimum element
    5: find maximum element
@@ -669,15 +690,14 @@ choices:
   11: delete by value
   12: delete value from left
   13: delete value from right
-enter your choice: 11
+enter your choice: 12
 
-enter value = -4
-modified sll = { 1, 5, 3, 7, 1, 8 }
+modified csll = { 87, 23, 986, 12312, 43, 889 }
 
 choices:
    0: exit
    1: access node at index
-   2: print sllist
+   2: print csllist
    3: search for matching value
    4: find minimum element
    5: find maximum element
@@ -689,16 +709,15 @@ choices:
   11: delete by value
   12: delete value from left
   13: delete value from right
-enter your choice: 9
+enter your choice: 10
 
-enter value = 78
-enter reference value = 7
-modified sll = { 1, 5, 3, 7, 78, 1, 8 }
+enter posn = 2
+modified csll = { 87, 23, 12312, 43, 889 }
 
 choices:
    0: exit
    1: access node at index
-   2: print sllist
+   2: print csllist
    3: search for matching value
    4: find minimum element
    5: find maximum element
