@@ -1,3 +1,9 @@
+/**
+ * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
+ * @topic   C program to add two polynomials using singly linked lists
+ * @date    7-9-2022
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -137,7 +143,7 @@ int main()
 polynomial 1, coeff = 0 to accept:
     enter coeff and exp: 12 9
     enter coeff and exp: 234 5
-    enter coeff and exp: 32 4 
+    enter coeff and exp: 32 4
     enter coeff and exp: 12 2
     enter coeff and exp: 6 1
     enter coeff and exp: 7 0
