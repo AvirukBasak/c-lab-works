@@ -1,7 +1,7 @@
 /**
  * @author  Aviruk Basak, CSE214047, Sem 3, Year 2
  * @topic   Stack implementation using array in C
- * @date    5-8-2022
+ * @date    12-10-2022
  */
 
 #include <stdio.h>
