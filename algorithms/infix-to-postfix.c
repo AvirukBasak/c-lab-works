@@ -136,9 +136,9 @@ char *toPostFix(const char *infix)
 {
     stack symst = new_stack();
     stack_push(symst, infix[0]);
-    int i = 1, j = 0;
+    int i = 1, j = 0, len = strlen(infix);
     char *postfix = malloc((j+1) * sizeof(char));
-    while (!stack_isempty(symst)) {
+    while (!stack_isempty(symst) && i < len) {
         char sym = infix[i];
         char t = stack_pop(symst);
         if (isalpha(sym) || (sym >= '0' && sym <= '9')) {
