@@ -1,2 +1,8 @@
+core
+*.o
+*.out
+*.dll
+*.a
+*.so
 *.exe
 *.elf
