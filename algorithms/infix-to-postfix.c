@@ -10,7 +10,7 @@
 #include <stdbool.h>
 
 #undef EOF
-#define EOF (255)
+#define EOF ((char) -1)
 typedef char StackType;
 
 /* ------------ START STACK IMPLEMENTATION -------------- */
