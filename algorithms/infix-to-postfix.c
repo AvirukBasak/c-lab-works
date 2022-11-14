@@ -132,44 +132,62 @@ int priority(Loc location, char sym)
 }
 
 /** Remember to free the returned pointer */
-char *toPostFix(const char *infix)
+char *str_appendchar(char *s, char c)
+{
+    if (!s) {
+        s = malloc(2 * sizeof(char));
+        if (!s) abort();
+        s[0] = c;
+        s[1] = 0;
+        return s;
+    }
+    int size = strlen(s) + 1;
+    s = realloc(s, (size+1) * sizeof(char));
+    if (!s) abort();
+    s[size-1] = c;
+    s[size] = 0;
+    return s;
+}
+
+/** Remember to free the returned pointer */
+char *toPostFix(const char *s)
 {
     stack symst = new_stack();
-    stack_push(symst, infix[0]);
-    int i = 1, j = 0, len = strlen(infix);
-    char *postfix = malloc((j+1) * sizeof(char));
-    while (!stack_isempty(symst) && i < len) {
-        char sym = infix[i];
-        char t = stack_pop(symst);
-        if (isalpha(sym) || (sym >= '0' && sym <= '9')) {
-            postfix[j++] = sym;
-            postfix = realloc(postfix, (j+1) * sizeof(char));
-            stack_push(symst, t);
-        } else if (sym == ')') {
-            while (t != '(') {
-                postfix[j++] = sym;
-                postfix = realloc(postfix, (j+1) * sizeof(char));
-                t = stack_pop(symst);
-            }
-            if (t == '(') stack_pop(symst);
-        } else if (sym == '(') {
+    int len = strlen(s);
+    char *result = NULL;
+    for (int i = 0; i < len; i++) {
+        char c = s[i];
+        // symbol = operand goes to output
+        if (isalpha(c) || isdigit(c))
+            result = str_appendchar(result, c);
+        // symbol = '(' gets pushed
+        else if (c == '(')
             stack_push(symst, '(');
-        } else if (priority(INCOMING, sym) > priority(IN_STACK, t)) {
-            stack_push(symst, t);
-            stack_push(symst, sym);
-        } else {
-            stack_push(symst, t);
-            while (priority(IN_STACK, stack_peek(symst)) <= priority(INCOMING, sym)) {
-                postfix[j++] = stack_pop(symst);
-                postfix = realloc(postfix, (j+1) * sizeof(char));
+        // symbol = ')' pop and output until symbol = '('
+        else if (c == ')') {
+            while (stack_peek(symst) != '(') {
+                result = str_appendchar(result, stack_peek(symst));
+                stack_pop(symst);
             }
-            stack_push(symst, sym);
+            stack_pop(symst);
         }
-        i++;
+        // symbol = operator
+        else {
+            while (!stack_isempty(symst)
+                   && priority(INCOMING, s[i]) <= priority(IN_STACK, stack_peek(symst))) {
+                result = str_appendchar(result, stack_peek(symst));
+                stack_pop(symst);
+            }
+            stack_push(symst, c);
+        }
     }
-    postfix[j] = 0;
+    // pop remaining symbols to output
+    while (!stack_isempty(symst)) {
+        result = str_appendchar(result, stack_peek(symst));
+        stack_pop(symst);
+    }
     stack_free(&symst);
-    return postfix;
+    return result;
 }
 
 /** Remember to free the returned pointer */
@@ -195,8 +213,15 @@ int main()
         if (strlen(infix) == 0) exit(0);
         char *postfix = toPostFix(infix);
         free(infix);
-        printf("postfix: %s\n", postfix); 
+        printf("postfix: %s\n", postfix);
         free(postfix);
     } while (true);
     return 0;
 }
+
+/* OUTPUT:
+
+enter infix exp, leave empty to exit: ((A+B)^C-(D*E)/F)
+postfix: AB+C^DE*F/-
+
+*/
