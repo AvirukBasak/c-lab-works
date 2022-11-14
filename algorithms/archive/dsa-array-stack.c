@@ -123,6 +123,7 @@ int main()
                     printf("stack is empty\n");
                 else
                     printf("stack is not empty\n");
+                break;
             }
             default: {
                 printf("choice invalid\n");
