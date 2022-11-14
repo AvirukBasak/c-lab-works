@@ -20,8 +20,6 @@
 # define ERR_MATINCOM      (202)
 # define ERR_MENUDRIVELIM  (204)
 
-# define MENUDRIVE_LIMIT  ((size_t) 10000)
-
 typedef MTX_TYPE  MatrixType;
 
 typedef struct Matrix {

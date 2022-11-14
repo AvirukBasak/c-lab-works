@@ -20,8 +20,6 @@
 # define ERR_ARRAYFULL    (203)
 # define ERR_MENUDRIVELIM (204)
 
-# define MENUDRIVE_LIMIT  ((size_t) 10000)
-
 typedef ARR_TYPE  ArrayType;
 typedef ARR_TYPE* Array;
 
@@ -278,7 +276,7 @@ void arr_free(Array* arr_ptr)
 int main()
 {
     int choice;
-    size_t i, size, len, menudrive_iterations = 0;
+    size_t i, size, len;
     printf("enter array max size: ");
     scanf("%zu", &size);
     printf("enter no of elements to store: ");
@@ -445,13 +443,7 @@ int main()
                 printf("choice invalid\n");
             }
         }
-        menudrive_iterations++;
-    } while (choice && menudrive_iterations < MENUDRIVE_LIMIT);
-    // MENUDRIVE_LIMIT to avoid an accidental infinite loop due to scanf I/O error
-    if (menudrive_iterations >= MENUDRIVE_LIMIT) {
-        printf("exceeded menu drive limit of '%zu' iterations\n", MENUDRIVE_LIMIT);
-        exit(ERR_MENUDRIVELIM);
-    }
+    } while (choice);
     arr_free(&arr);
     return 0;
 }
