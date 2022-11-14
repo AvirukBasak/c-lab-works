@@ -105,6 +105,7 @@ typedef enum {
 } Loc;
 
 int priority(Loc location, char sym);
+char *str_appendchar(char *s, char c);
 char *inputStr(const char *prompt);
 char *toPostFix(const char *infix);
 
@@ -194,15 +195,12 @@ char *toPostFix(const char *s)
 char *inputStr(const char *prompt)
 {
     printf("%s", prompt);
-    int i = 0;
     char c = getchar();
-    char *in = malloc(1 * sizeof(char));
+    char *in = NULL;
     while (c != EOF && c != 0 && c != '\n') {
-        in[i++] = c;
-        in = realloc(in, (i+1) * sizeof(char));
+        in = str_appendchar(in, c);
         c = getchar();
     }
-    in[i] = 0;
     return in;
 }
 
@@ -210,7 +208,7 @@ int main()
 {
     do {
         char *infix = inputStr("enter infix exp, leave empty to exit: ");
-        if (strlen(infix) == 0) exit(0);
+        if (!infix) exit(0);
         char *postfix = toPostFix(infix);
         free(infix);
         printf("postfix: %s\n", postfix);
