@@ -97,7 +97,56 @@ BST bst_search(BST bst, Type val)
 }
 
 bool bst_delete(BST bst, Type val)
-{ return false; }
+{
+    if (!bst) abort();
+    // value found at childless root
+    if (bst->val == val && !bst->lc && !bst->rc) {
+        bst->isinit = true;
+        bst->val = 0;
+        return true;
+    }
+    BST prev = NULL, p = bst;
+    while (p)
+        if (val == p->val) break;
+        else {
+            prev = p;
+            if (val < p->val) p = p->lc;
+            else p = p->rc;
+        }
+    if (!p) return false;
+    // target node has right child
+    if (p->rc) {
+        BST tmp = p->rc;
+        prev = p;
+        while (tmp->lc) {
+            prev = tmp;
+            tmp = tmp->lc;
+        }
+        p->val = tmp->val;
+        if (prev == p) prev->rc = tmp->rc;
+        else prev->lc = tmp->rc;
+        free(tmp);
+    }
+    // target node has no right child but has parent
+    else if (prev) {
+        BST tmp;
+        if (prev->lc == p) {
+            tmp = prev->lc;
+            prev->lc = p->lc;
+        } else {
+            tmp = prev->rc;
+            prev->rc = p->lc;
+        }
+        free(tmp);
+    }
+    // target node has no parent, i.e. root
+    else {
+        BST tmp = p;
+        p = p->lc;
+        free(tmp);
+    }
+    return true;
+}
 
 int main()
 {
@@ -109,7 +158,7 @@ int main()
                "   1: print in-order\n"
                "   2: search element\n"
                "   3: insert new elements\n"
-        //     "   4: delete an element\n"
+               "   4: delete an element\n"
                "enter your choice: ");
         scanf("%d", &ch);
         printf("\n");
