@@ -234,7 +234,8 @@ choices:
    5: insert new elements
 enter your choice: 1
 
-in-order = { 12, 19, 22, 34, 45, 67, }                     
+in-order = { 12, 19, 22, 34, 45, 67, }
+
 choices:
    0: exit
    1: print in-order
