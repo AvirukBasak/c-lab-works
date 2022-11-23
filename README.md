@@ -9,6 +9,10 @@ $ ./runc "file_name.c" [args]
 ```
 
 ### Files
+Following files are in printable HTML format.
+So, copying code is a pain.
+
+For copying, visit [algorithms/archive](algorithms/archive).
 
 - [dsa-array.c](https://avirukbasak.github.io/c-lab-works/algorithms/printable/archive/dsa-array.c.html)
 - [dsa-matrix.c](https://avirukbasak.github.io/c-lab-works/algorithms/printable/archive/dsa-matrix.c.html)
