@@ -31,3 +31,5 @@ For copying, visit [algorithms/archive](algorithms/archive).
 - [dsa-linked-bst.c](https://avirukbasak.github.io/c-lab-works/algorithms/printable/archive/dsa-linked-bst.c.html)
 - [`dsa-array-searching.c:404`](https://avirukbasak.github.io/c-lab-works/algorithms/printable/archive/dsa-array-searching.c.html)
 - [dsa-array-searching.c](https://avirukbasak.github.io/c-lab-works/algorithms/printable/dsa-array-searching.c.html)
+- [`dsa-array-sorting.c:404`](https://avirukbasak.github.io/c-lab-works/algorithms/printable/archive/dsa-array-sorting.c.html)
+- [dsa-array-sorting.c](https://avirukbasak.github.io/c-lab-works/algorithms/printable/dsa-array-sorting.c.html)
