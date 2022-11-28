@@ -1,6 +1,4 @@
 # C Lab Works
-[![pages-build-deployment](https://github.com/AvirukBasak/c-lab-works/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/AvirukBasak/c-lab-works/actions/workflows/pages/pages-build-deployment)
-
 Basic C programs by college
 
 ### How to run?
